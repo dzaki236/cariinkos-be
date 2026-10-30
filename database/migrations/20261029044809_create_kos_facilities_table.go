@@ -22,6 +22,8 @@ func (r *M20261029044809CreateKosFacilitiesTable) Up() error {
 			table.Primary("kos_id", "facility_id")
 			table.Foreign("kos_id").References("id").On("kos")
 			table.Foreign("facility_id").References("id").On("facilities")
+			table.TimestampsTz()
+
 		})
 	}
 
