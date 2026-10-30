@@ -323,25 +323,6 @@
                 }
             ],
             "get": {
-                "400": {
-                    "description": "Request body tidak valid",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ErrorResponse"
-                            },
-                            "example": {
-                                "message": "Invalid request body"
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
                 "tags": [
                     "Kos"
                 ],
@@ -421,523 +402,585 @@
                                 }
                             }
                         }
-                    }
-                }
-            }
-        },
-        "put": {
-            "tags": [
-                "Kos"
-            ],
-            "summary": "Perbarui kos",
-            "operationId": "updateKos",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/KosRequest"
-                        }
-                    }
-                }
-            },
-            "responses": {
-                "200": {
-                    "description": "Kos diperbarui",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/KosResponse"
-                            },
-                            "example": {
-                                "data": {
-                                    "id": "123e4567-e89b-12d3-a456-426614174000",
-                                    "user_id": "123e4567-e89b-12d3-a456-426614174001",
-                                    "name": "Kos Melati",
-                                    "address": "Jl. Merdeka No. 10",
-                                    "province": "Jawa Barat",
-                                    "city": "Bandung",
-                                    "district": "Coblong",
-                                    "description": "Kos dekat kampus",
-                                    "subdistrict": "Dago",
-                                    "gmaps_link": "https://maps.example/kos-melati",
-                                    "price_monthly": 1500000,
-                                    "room_size": 20,
-                                    "total_rooms": 10,
-                                    "available_rooms": 2,
-                                    "minimum_rent_months": 1,
-                                    "type": "woman",
-                                    "status": "published",
-                                    "rules": "Tidak boleh merokok",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
+                    },
+                    "400": {
+                        "description": "Request body tidak valid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Invalid request body"
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
                     }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
-                "422": {
-                    "$ref": "#/components/responses/ValidationFailed"
                 }
-            }
-        },
-        "delete": {
-            "tags": [
-                "Kos"
-            ],
-            "summary": "Hapus kos",
-            "operationId": "deleteKos",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Kos dihapus",
+            },
+            "put": {
+                "tags": [
+                    "Kos"
+                ],
+                "summary": "Perbarui kos",
+                "operationId": "updateKos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MessageResponse"
-                            },
-                            "example": {
-                                "message": "Kos deleted successfully"
+                                "$ref": "#/components/schemas/KosRequest"
                             }
                         }
                     }
                 },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                }
-            }
-        }
-    },
-    "/facilities": {
-        "get": {
-            "tags": [
-                "Fasilitas"
-            ],
-            "summary": "Daftar fasilitas",
-            "operationId": "listFacilities",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Daftar fasilitas",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/FacilityListResponse"
-                            },
-                            "example": {
-                                "data": [
-                                    {
-                                        "id": "123e4567-e89b-12d3-a456-426614174002",
-                                        "name": "Wi-Fi",
-                                        "icon": "fa-solid fa-wifi",
+                "responses": {
+                    "200": {
+                        "description": "Kos diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KosResponse"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": "123e4567-e89b-12d3-a456-426614174000",
+                                        "user_id": "123e4567-e89b-12d3-a456-426614174001",
+                                        "name": "Kos Melati",
+                                        "address": "Jl. Merdeka No. 10",
+                                        "province": "Jawa Barat",
+                                        "city": "Bandung",
+                                        "district": "Coblong",
+                                        "description": "Kos dekat kampus",
+                                        "subdistrict": "Dago",
+                                        "gmaps_link": "https://maps.example/kos-melati",
+                                        "price_monthly": 1500000,
+                                        "room_size": 20,
+                                        "total_rooms": 10,
+                                        "available_rooms": 2,
+                                        "minimum_rent_months": 1,
+                                        "type": "woman",
+                                        "status": "published",
+                                        "rules": "Tidak boleh merokok",
                                         "created_at": "2026-10-30T08:00:00Z",
                                         "updated_at": "2026-10-30T08:00:00Z"
                                     }
-                                ]
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                }
-            }
-        },
-        "post": {
-            "tags": [
-                "Fasilitas"
-            ],
-            "summary": "Buat fasilitas",
-            "operationId": "createFacility",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/FacilityRequest"
-                        },
-                        "example": {
-                            "name": "Wi-Fi",
-                            "icon": "fa-solid fa-wifi"
-                        }
-                    }
-                }
-            },
-            "responses": {
-                "201": {
-                    "description": "Fasilitas dibuat",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/FacilityResponse"
-                            },
-                            "example": {
-                                "data": {
-                                    "id": "123e4567-e89b-12d3-a456-426614174002",
-                                    "name": "Wi-Fi",
-                                    "icon": "fa-solid fa-wifi",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
                                 }
                             }
                         }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "422": {
-                    "$ref": "#/components/responses/ValidationFailed"
-                }
-            }
-        }
-    },
-    "/facilities/{id}": {
-        "parameters": [
-            {
-                "$ref": "#/components/parameters/Id"
-            }
-        ],
-        "get": {
-            "tags": [
-                "Fasilitas"
-            ],
-            "summary": "Detail fasilitas",
-            "operationId": "getFacility",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Detail fasilitas",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/FacilityResponse"
-                            },
-                            "example": {
-                                "data": {
-                                    "id": "123e4567-e89b-12d3-a456-426614174002",
-                                    "name": "Wi-Fi",
-                                    "icon": "fa-solid fa-wifi",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
-                                }
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                }
-            }
-        },
-        "put": {
-            "tags": [
-                "Fasilitas"
-            ],
-            "summary": "Perbarui fasilitas",
-            "operationId": "updateFacility",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/FacilityRequest"
-                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
                     }
                 }
             },
-            "responses": {
-                "200": {
-                    "description": "Fasilitas diperbarui",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/FacilityResponse"
-                            },
-                            "example": {
-                                "data": {
-                                    "id": "123e4567-e89b-12d3-a456-426614174002",
-                                    "name": "Wi-Fi",
-                                    "icon": "fa-solid fa-wifi",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
+            "delete": {
+                "tags": [
+                    "Kos"
+                ],
+                "summary": "Hapus kos",
+                "operationId": "deleteKos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kos dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Kos deleted successfully"
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
                     }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
-                "422": {
-                    "$ref": "#/components/responses/ValidationFailed"
                 }
             }
         },
-        "delete": {
-            "tags": [
-                "Fasilitas"
-            ],
-            "summary": "Hapus fasilitas",
-            "operationId": "deleteFacility",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Fasilitas dihapus",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/MessageResponse"
-                            },
-                            "example": {
-                                "message": "Facility deleted successfully"
-                            }
-                        }
+        "/facilities": {
+            "get": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Daftar fasilitas",
+                "operationId": "listFacilities",
+                "security": [
+                    {
+                        "BearerAuth": []
                     }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                }
-            }
-        }
-    },
-    "/kos/{id}/facilities": {
-        "parameters": [
-            {
-                "$ref": "#/components/parameters/Id"
-            }
-        ],
-        "get": {
-            "tags": [
-                "Fasilitas Kos"
-            ],
-            "summary": "Daftar fasilitas pada kos",
-            "operationId": "listKosFacilities",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Fasilitas pada kos",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/FacilityListResponse"
-                            },
-                            "example": {
-                                "data": [
-                                    {
-                                        "id": "123e4567-e89b-12d3-a456-426614174002",
-                                        "name": "Wi-Fi",
-                                        "icon": "fa-solid fa-wifi",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                }
-            }
-        },
-        "post": {
-            "tags": [
-                "Fasilitas Kos"
-            ],
-            "summary": "Kaitkan fasilitas ke kos",
-            "operationId": "attachKosFacility",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/AttachFacilityRequest"
-                        },
-                        "example": {
-                            "facility_id": "123e4567-e89b-12d3-a456-426614174000"
-                        }
-                    }
-                }
-            },
-            "responses": {
-                "201": {
-                    "description": "Fasilitas dikaitkan",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/MessageResponse"
-                            },
-                            "example": {
-                                "message": "Facility attached to kos successfully"
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
-                "422": {
-                    "description": "Validasi gagal",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ErrorResponse"
-                            },
-                            "example": {
-                                "message": "Validation failed",
-                                "errors": {
-                                    "facility_id": [
-                                        "The facility_id field is required."
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar fasilitas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FacilityListResponse"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": "123e4567-e89b-12d3-a456-426614174002",
+                                            "name": "Wi-Fi",
+                                            "icon": "fa-solid fa-wifi",
+                                            "created_at": "2026-10-30T08:00:00Z",
+                                            "updated_at": "2026-10-30T08:00:00Z"
+                                        }
                                     ]
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
                     }
                 }
-            }
-        }
-    },
-    "/kos/{id}/facilities/{facility_id}": {
-        "parameters": [
-            {
-                "$ref": "#/components/parameters/Id"
             },
-            {
-                "name": "facility_id",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "string"
-                }
-            }
-        ],
-        "delete": {
-            "tags": [
-                "Fasilitas Kos"
-            ],
-            "summary": "Hapus fasilitas dari kos",
-            "operationId": "detachKosFacility",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Relasi fasilitas dilepas",
+            "post": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Buat fasilitas",
+                "operationId": "createFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MessageResponse"
+                                "$ref": "#/components/schemas/FacilityRequest"
                             },
                             "example": {
-                                "message": "Facility detached from kos successfully"
+                                "name": "Wi-Fi",
+                                "icon": "fa-solid fa-wifi"
                             }
                         }
                     }
                 },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
+                "responses": {
+                    "201": {
+                        "description": "Fasilitas dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FacilityResponse"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": "123e4567-e89b-12d3-a456-426614174002",
+                                        "name": "Wi-Fi",
+                                        "icon": "fa-solid fa-wifi",
+                                        "created_at": "2026-10-30T08:00:00Z",
+                                        "updated_at": "2026-10-30T08:00:00Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
                 }
             }
-        }
-    },
-    "/kos/{id}/photos": {
-        "parameters": [
-            {
-                "$ref": "#/components/parameters/Id"
-            }
-        ],
-        "get": {
-            "tags": [
-                "Foto Kos"
-            ],
-            "summary": "Daftar foto kos",
-            "operationId": "listKosPhotos",
-            "security": [
+        },
+        "/facilities/{id}": {
+            "parameters": [
                 {
-                    "BearerAuth": []
+                    "$ref": "#/components/parameters/Id"
                 }
             ],
-            "responses": {
-                "200": {
-                    "description": "Foto kos",
+            "get": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Detail fasilitas",
+                "operationId": "getFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail fasilitas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FacilityResponse"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": "123e4567-e89b-12d3-a456-426614174002",
+                                        "name": "Wi-Fi",
+                                        "icon": "fa-solid fa-wifi",
+                                        "created_at": "2026-10-30T08:00:00Z",
+                                        "updated_at": "2026-10-30T08:00:00Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Perbarui fasilitas",
+                "operationId": "updateFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/KosPhotoListResponse"
+                                "$ref": "#/components/schemas/FacilityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FacilityResponse"
+                                },
+                                "example": {
+                                    "data": {
+                                        "id": "123e4567-e89b-12d3-a456-426614174002",
+                                        "name": "Wi-Fi",
+                                        "icon": "fa-solid fa-wifi",
+                                        "created_at": "2026-10-30T08:00:00Z",
+                                        "updated_at": "2026-10-30T08:00:00Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Hapus fasilitas",
+                "operationId": "deleteFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Facility deleted successfully"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/facilities": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Fasilitas Kos"
+                ],
+                "summary": "Daftar fasilitas pada kos",
+                "operationId": "listKosFacilities",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas pada kos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FacilityListResponse"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": "123e4567-e89b-12d3-a456-426614174002",
+                                            "name": "Wi-Fi",
+                                            "icon": "fa-solid fa-wifi",
+                                            "created_at": "2026-10-30T08:00:00Z",
+                                            "updated_at": "2026-10-30T08:00:00Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Fasilitas Kos"
+                ],
+                "summary": "Kaitkan fasilitas ke kos",
+                "operationId": "attachKosFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AttachFacilityRequest"
                             },
                             "example": {
-                                "data": [
-                                    {
+                                "facility_id": "123e4567-e89b-12d3-a456-426614174000"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Fasilitas dikaitkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Facility attached to kos successfully"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Validation failed",
+                                    "errors": {
+                                        "facility_id": [
+                                            "The facility_id field is required."
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/kos/{id}/facilities/{facility_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "name": "facility_id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "delete": {
+                "tags": [
+                    "Fasilitas Kos"
+                ],
+                "summary": "Hapus fasilitas dari kos",
+                "operationId": "detachKosFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Relasi fasilitas dilepas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Facility detached from kos successfully"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/photos": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Foto Kos"
+                ],
+                "summary": "Daftar foto kos",
+                "operationId": "listKosPhotos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Foto kos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KosPhotoListResponse"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": "123e4567-e89b-12d3-a456-426614174003",
+                                            "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+                                            "image_url": "https://example.com/kos-melati/kamar.jpg",
+                                            "public_id": "koskita/photos/kos-melati-kamar",
+                                            "created_at": "2026-10-30T08:00:00Z",
+                                            "updated_at": "2026-10-30T08:00:00Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Foto Kos"
+                ],
+                "summary": "Unggah foto kos",
+                "operationId": "uploadKosPhoto",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PhotoUpload"
+                },
+                "responses": {
+                    "201": {
+                        "description": "Foto dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KosPhotoResponse"
+                                },
+                                "example": {
+                                    "data": {
                                         "id": "123e4567-e89b-12d3-a456-426614174003",
                                         "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                         "image_url": "https://example.com/kos-melati/kamar.jpg",
@@ -945,401 +988,358 @@
                                         "created_at": "2026-10-30T08:00:00Z",
                                         "updated_at": "2026-10-30T08:00:00Z"
                                     }
-                                ]
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                }
-            }
-        },
-        "post": {
-            "tags": [
-                "Foto Kos"
-            ],
-            "summary": "Unggah foto kos",
-            "operationId": "uploadKosPhoto",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "$ref": "#/components/requestBodies/PhotoUpload"
-            },
-            "responses": {
-                "201": {
-                    "description": "Foto dibuat",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/KosPhotoResponse"
-                            },
-                            "example": {
-                                "data": {
-                                    "id": "123e4567-e89b-12d3-a456-426614174003",
-                                    "kos_id": "123e4567-e89b-12d3-a456-426614174000",
-                                    "image_url": "https://example.com/kos-melati/kamar.jpg",
-                                    "public_id": "koskita/photos/kos-melati-kamar",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
                                 }
                             }
                         }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
-                "422": {
-                    "description": "File foto wajib ada dan harus JPEG, PNG, atau WebP dengan ukuran 1 byte hingga 10 MB",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ErrorResponse"
-                            },
-                            "examples": {
-                                "missing": {
-                                    "value": {
-                                        "message": "Photo file is required"
-                                    }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "description": "File foto wajib ada dan harus JPEG, PNG, atau WebP dengan ukuran 1 byte hingga 10 MB",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 },
-                                "invalid": {
-                                    "value": {
-                                        "message": "Photo must be a JPEG, PNG, or WebP image"
+                                "examples": {
+                                    "missing": {
+                                        "value": {
+                                            "message": "Photo file is required"
+                                        }
+                                    },
+                                    "invalid": {
+                                        "value": {
+                                            "message": "Photo must be a JPEG, PNG, or WebP image"
+                                        }
+                                    },
+                                    "size": {
+                                        "value": {
+                                            "message": "Photo must be between 1 byte and 10 MB"
+                                        }
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/kos/{id}/photos/{photo_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "name": "photo_id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            ],
+            "put": {
+                "tags": [
+                    "Foto Kos"
+                ],
+                "summary": "Ganti foto kos",
+                "operationId": "replaceKosPhoto",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PhotoUpload"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Foto diganti",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KosPhotoResponse"
                                 },
-                                "size": {
-                                    "value": {
-                                        "message": "Photo must be between 1 byte and 10 MB"
+                                "example": {
+                                    "data": {
+                                        "id": "123e4567-e89b-12d3-a456-426614174003",
+                                        "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+                                        "image_url": "https://example.com/kos-melati/kamar.jpg",
+                                        "public_id": "koskita/photos/kos-melati-kamar",
+                                        "created_at": "2026-10-30T08:00:00Z",
+                                        "updated_at": "2026-10-30T08:00:00Z"
                                     }
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
-    },
-    "/kos/{id}/photos/{photo_id}": {
-        "parameters": [
-            {
-                "$ref": "#/components/parameters/Id"
-            },
-            {
-                "name": "photo_id",
-                "in": "path",
-                "required": true,
-                "schema": {
-                    "type": "string",
-                    "format": "uuid"
-                }
-            }
-        ],
-        "put": {
-            "tags": [
-                "Foto Kos"
-            ],
-            "summary": "Ganti foto kos",
-            "operationId": "replaceKosPhoto",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "$ref": "#/components/requestBodies/PhotoUpload"
-            },
-            "responses": {
-                "200": {
-                    "description": "Foto diganti",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/KosPhotoResponse"
-                            },
-                            "example": {
-                                "data": {
-                                    "id": "123e4567-e89b-12d3-a456-426614174003",
-                                    "kos_id": "123e4567-e89b-12d3-a456-426614174000",
-                                    "image_url": "https://example.com/kos-melati/kamar.jpg",
-                                    "public_id": "koskita/photos/kos-melati-kamar",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
-                                }
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
-                "422": {
-                    "description": "File foto wajib ada dan harus JPEG, PNG, atau WebP dengan ukuran 1 byte hingga 10 MB",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ErrorResponse"
-                            },
-                            "examples": {
-                                "missing": {
-                                    "value": {
-                                        "message": "Photo file is required"
-                                    }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "description": "File foto wajib ada dan harus JPEG, PNG, atau WebP dengan ukuran 1 byte hingga 10 MB",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 },
-                                "invalid": {
-                                    "value": {
-                                        "message": "Photo must be a JPEG, PNG, or WebP image"
+                                "examples": {
+                                    "missing": {
+                                        "value": {
+                                            "message": "Photo file is required"
+                                        }
+                                    },
+                                    "invalid": {
+                                        "value": {
+                                            "message": "Photo must be a JPEG, PNG, or WebP image"
+                                        }
+                                    },
+                                    "size": {
+                                        "value": {
+                                            "message": "Photo must be between 1 byte and 10 MB"
+                                        }
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Foto Kos"
+                ],
+                "summary": "Hapus foto kos",
+                "operationId": "deleteKosPhoto",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Foto dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 },
-                                "size": {
-                                    "value": {
-                                        "message": "Photo must be between 1 byte and 10 MB"
+                                "example": {
+                                    "message": "Kos photo deleted successfully"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/contacts": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Kontak Kos"
+                ],
+                "summary": "Lihat kontak kos",
+                "operationId": "getKosContact",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kontak kos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KosContactResponse"
+                                },
+                                "example": {
+                                    "data": {
+                                        "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+                                        "contact_name": "Penjaga Kos",
+                                        "phone": "+62221234567",
+                                        "whatsapp": "+6281234567890",
+                                        "created_at": "2026-10-30T08:00:00Z",
+                                        "updated_at": "2026-10-30T08:00:00Z"
                                     }
                                 }
                             }
                         }
-                    }
-                }
-            }
-        },
-        "delete": {
-            "tags": [
-                "Foto Kos"
-            ],
-            "summary": "Hapus foto kos",
-            "operationId": "deleteKosPhoto",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Foto dihapus",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/MessageResponse"
-                            },
-                            "example": {
-                                "message": "Kos photo deleted successfully"
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                }
-            }
-        }
-    },
-    "/kos/{id}/contacts": {
-        "parameters": [
-            {
-                "$ref": "#/components/parameters/Id"
-            }
-        ],
-        "get": {
-            "tags": [
-                "Kontak Kos"
-            ],
-            "summary": "Lihat kontak kos",
-            "operationId": "getKosContact",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Kontak kos",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/KosContactResponse"
-                            },
-                            "example": {
-                                "data": {
-                                    "kos_id": "123e4567-e89b-12d3-a456-426614174000",
-                                    "contact_name": "Penjaga Kos",
-                                    "phone": "+62221234567",
-                                    "whatsapp": "+6281234567890",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
-                                }
-                            }
-                        }
-                    }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                }
-            }
-        },
-        "post": {
-            "tags": [
-                "Kontak Kos"
-            ],
-            "summary": "Simpan kontak kos",
-            "operationId": "createKosContact",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/KosContactRequest"
-                        },
-                        "example": {
-                            "phone": "+62221234567",
-                            "whatsapp": "+6281234567890",
-                            "contact_name": "Penjaga Kos"
-                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
                     }
                 }
             },
-            "responses": {
-                "201": {
-                    "description": "Kontak dibuat",
+            "post": {
+                "tags": [
+                    "Kontak Kos"
+                ],
+                "summary": "Simpan kontak kos",
+                "operationId": "createKosContact",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/KosContactResponse"
+                                "$ref": "#/components/schemas/KosContactRequest"
                             },
                             "example": {
-                                "data": {
-                                    "kos_id": "123e4567-e89b-12d3-a456-426614174000",
-                                    "contact_name": "Penjaga Kos",
-                                    "phone": "+62221234567",
-                                    "whatsapp": "+6281234567890",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
-                                }
+                                "phone": "+62221234567",
+                                "whatsapp": "+6281234567890",
+                                "contact_name": "Penjaga Kos"
                             }
                         }
                     }
                 },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
-                "422": {
-                    "$ref": "#/components/responses/ValidationFailed"
-                }
-            }
-        },
-        "put": {
-            "tags": [
-                "Kontak Kos"
-            ],
-            "summary": "Perbarui kontak kos",
-            "operationId": "updateKosContact",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "requestBody": {
-                "required": true,
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/KosContactRequest"
-                        },
-                        "example": {
-                            "contact_name": "Penjaga Kos",
-                            "phone": "+62221234567",
-                            "whatsapp": "+6281234567890"
+                "responses": {
+                    "201": {
+                        "description": "Kontak dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KosContactResponse"
+                                },
+                                "example": {
+                                    "data": {
+                                        "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+                                        "contact_name": "Penjaga Kos",
+                                        "phone": "+62221234567",
+                                        "whatsapp": "+6281234567890",
+                                        "created_at": "2026-10-30T08:00:00Z",
+                                        "updated_at": "2026-10-30T08:00:00Z"
+                                    }
+                                }
+                            }
                         }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
                     }
                 }
             },
-            "responses": {
-                "200": {
-                    "description": "Kontak diperbarui",
+            "put": {
+                "tags": [
+                    "Kontak Kos"
+                ],
+                "summary": "Perbarui kontak kos",
+                "operationId": "updateKosContact",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/KosContactResponse"
+                                "$ref": "#/components/schemas/KosContactRequest"
                             },
                             "example": {
-                                "data": {
-                                    "kos_id": "123e4567-e89b-12d3-a456-426614174000",
-                                    "contact_name": "Penjaga Kos",
-                                    "phone": "+62221234567",
-                                    "whatsapp": "+6281234567890",
-                                    "created_at": "2026-10-30T08:00:00Z",
-                                    "updated_at": "2026-10-30T08:00:00Z"
+                                "contact_name": "Penjaga Kos",
+                                "phone": "+62221234567",
+                                "whatsapp": "+6281234567890"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Kontak diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/KosContactResponse"
+                                },
+                                "example": {
+                                    "data": {
+                                        "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+                                        "contact_name": "Penjaga Kos",
+                                        "phone": "+62221234567",
+                                        "whatsapp": "+6281234567890",
+                                        "created_at": "2026-10-30T08:00:00Z",
+                                        "updated_at": "2026-10-30T08:00:00Z"
+                                    }
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
                     }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
-                "422": {
-                    "$ref": "#/components/responses/ValidationFailed"
                 }
-            }
-        },
-        "delete": {
-            "tags": [
-                "Kontak Kos"
-            ],
-            "summary": "Hapus kontak kos",
-            "operationId": "deleteKosContact",
-            "security": [
-                {
-                    "BearerAuth": []
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Kontak dihapus",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/MessageResponse"
-                            },
-                            "example": {
-                                "message": "Kos contact deleted successfully"
+            },
+            "delete": {
+                "tags": [
+                    "Kontak Kos"
+                ],
+                "summary": "Hapus kontak kos",
+                "operationId": "deleteKosContact",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kontak dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Kos contact deleted successfully"
+                                }
                             }
                         }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
                     }
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
                 }
             }
         }
