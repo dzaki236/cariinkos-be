@@ -5,7 +5,7 @@ Dokumentasi REST API backend CariinKos. API menggunakan JSON kecuali endpoint un
 ## Base URL
 
 ```text
-http://localhost:3000/api/v1
+http://62.171.163.24:10333/api/v1
 ```
 
 Sesuaikan host dan port dengan konfigurasi deployment. Endpoint `GET /` pada base path mengembalikan `{"halo":"api"}`.
@@ -453,7 +453,7 @@ Create mengembalikan `201` dan resource foto di `data`. Update mengganti foto la
 Login:
 
 ```bash
-curl -X POST http://localhost:3000/api/v1/login \
+curl -X POST http://62.171.163.24:10333/api/v1/login \
   -H "Content-Type: application/json" \
   -d '{"email":"pemilik@example.com","password":"password"}'
 ```
@@ -461,7 +461,7 @@ curl -X POST http://localhost:3000/api/v1/login \
 Buat kos (ganti `<token>` dengan JWT hasil login):
 
 ```bash
-curl -X POST http://localhost:3000/api/v1/kos \
+curl -X POST http://62.171.163.24:10333/api/v1/kos \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"name":"Kos Melati","address":"Jl. Merdeka No. 10","province":"Jawa Barat","city":"Bandung","district":"Coblong","price_monthly":1500000,"type":"woman","status":"published"}'
@@ -470,7 +470,7 @@ curl -X POST http://localhost:3000/api/v1/kos \
 Unggah foto:
 
 ```bash
-curl -X POST http://localhost:3000/api/v1/kos/<kos-id>/photos \
+curl -X POST http://62.171.163.24:10333/api/v1/kos/<kos-id>/photos \
   -H "Authorization: Bearer <token>" \
   -F "photo=@./kamar.jpg"
 ```
