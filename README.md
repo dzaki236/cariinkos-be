@@ -52,6 +52,7 @@ Respons resource umumnya dibungkus dengan `data`:
     "province": "Jawa Barat",
     "city": "Bandung",
     "district": "Coblong",
+    "room_size": 20,
     "price_monthly": 1500000,
     "total_rooms": 10,
     "available_rooms": 2,
@@ -73,11 +74,11 @@ Operasi yang tidak mengembalikan resource memberikan `message`. Validasi gagal m
 }
 ```
 
-Error umum lainnya menggunakan `message`; format detail dapat berbeda menurut endpoint. `id` resource berupa UUID dan waktu ditulis sebagai timestamp. Respons daftar kos juga menyertakan metadata pagination (`page`, `per_page`, `total`, `last_page`).
+Error umum lainnya memakai `message`. Resource yang tidak ditemukan mengembalikan `{"message":"Data not found"}`; error server yang tidak terduga mengembalikan `{"message":"An unexpected error occurred","unrealmsg":"..."}`. Body JSON yang gagal di-bind biasanya menghasilkan `400 Invalid request body`, kecuali `PUT /kos/{id}` yang saat ini menghasilkan `404` untuk kondisi tersebut. `id` resource berupa UUID dan waktu ditulis sebagai timestamp. Respons daftar kos juga menyertakan metadata pagination (`page`, `per_page`, `total`, `last_page`).
 
 ## Contoh Response
 
-Contoh berikut memakai nilai ilustratif. Field relasi seperti `user`, `facilities`, `contact`, dan `photos` hanya muncul bila dimuat oleh endpoint; field opsional yang kosong dapat tidak disertakan. `cover_photo` tersedia pada daftar kos (`GET /kos`): nilainya URL foto kos yang paling awal dibuat, atau URL gambar fallback bila belum ada foto. Endpoint kos lain saat ini tidak mengisi field tersebut.
+Contoh berikut memakai nilai ilustratif. Field ber-pointer atau relasi bertag `omitempty` tidak muncul jika nilainya kosong/tidak dimuat. `GET /kos` mengisi `cover_photo` dengan URL foto paling awal dibuat atau URL fallback. Respons create/update kos dan detail kos tidak mengisi `cover_photo`.
 
 ### Login berhasil (`200`)
 
@@ -113,13 +114,17 @@ Contoh berikut memakai nilai ilustratif. Field relasi seperti `user`, `facilitie
     "province": "Jawa Barat",
     "city": "Bandung",
     "district": "Coblong",
+    "description": "Kos dekat kampus",
+    "subdistrict": "Dago",
+    "gmaps_link": "https://maps.example/kos-melati",
     "price_monthly": 1500000,
+    "room_size": 20,
     "total_rooms": 10,
     "available_rooms": 2,
     "minimum_rent_months": 1,
     "type": "woman",
     "status": "published",
-    "cover_photo": "https://example.com/kos-melati/kamar.jpg",
+    "rules": "Tidak boleh merokok",
     "created_at": "2026-10-30T08:00:00Z",
     "updated_at": "2026-10-30T08:00:00Z"
   }
@@ -140,12 +145,17 @@ Detail kos menyertakan relasi pemilik, fasilitas, kontak, dan foto yang dimuat o
     "province": "Jawa Barat",
     "city": "Bandung",
     "district": "Coblong",
+    "description": "Kos dekat kampus",
+    "subdistrict": "Dago",
+    "gmaps_link": "https://maps.example/kos-melati",
     "price_monthly": 1500000,
+    "room_size": 20,
     "total_rooms": 10,
     "available_rooms": 2,
     "minimum_rent_months": 1,
     "type": "woman",
     "status": "published",
+    "rules": "Tidak boleh merokok",
     "created_at": "2026-10-30T08:00:00Z",
     "updated_at": "2026-10-30T08:00:00Z",
     "user": {
@@ -160,7 +170,7 @@ Detail kos menyertakan relasi pemilik, fasilitas, kontak, dan foto yang dimuat o
       {
         "id": "123e4567-e89b-12d3-a456-426614174002",
         "name": "Wi-Fi",
-        "icon": "wifi",
+        "icon": "fa-solid fa-wifi",
         "created_at": "2026-10-30T08:00:00Z",
         "updated_at": "2026-10-30T08:00:00Z"
       }
@@ -178,6 +188,7 @@ Detail kos menyertakan relasi pemilik, fasilitas, kontak, dan foto yang dimuat o
         "id": "123e4567-e89b-12d3-a456-426614174003",
         "kos_id": "123e4567-e89b-12d3-a456-426614174000",
         "image_url": "https://example.com/kos-melati/kamar.jpg",
+        "public_id": "koskita/photos/kos-melati-kamar",
         "created_at": "2026-10-30T08:00:00Z",
         "updated_at": "2026-10-30T08:00:00Z"
       }
@@ -193,7 +204,7 @@ Detail kos menyertakan relasi pemilik, fasilitas, kontak, dan foto yang dimuat o
   "data": {
     "id": "123e4567-e89b-12d3-a456-426614174002",
     "name": "Wi-Fi",
-    "icon": "wifi",
+    "icon": "fa-solid fa-wifi",
     "created_at": "2026-10-30T08:00:00Z",
     "updated_at": "2026-10-30T08:00:00Z"
   }
@@ -255,7 +266,7 @@ Detail kos menyertakan relasi pemilik, fasilitas, kontak, dan foto yang dimuat o
 ### Resource tidak ditemukan (`404`)
 
 ```json
-{"message":"Resource not found"}
+{"message":"Data not found"}
 ```
 
 ## Ringkasan Endpoint
@@ -375,7 +386,7 @@ Contoh body create/update:
 }
 ```
 
-`POST /kos` mengembalikan `201` dengan resource di `data`; daftar mengembalikan `data` dan `meta`, sedangkan detail mengembalikan `data`. `GET /kos` menerima `page` (default `1`) dan `per_page` (default `10`, maksimum `100`); nilai tidak valid atau kurang dari `1` kembali ke default. Update memakai `PUT` dan mengembalikan resource di `data`. Delete mengembalikan pesan sukses. Pada create, hanya field nama, alamat, provinsi, kota, distrik, dan harga yang diwajibkan; `type` dan `status` bila diisi harus menggunakan nilai yang didukung. Pada update, `type` dan `status` juga wajib.
+`POST /kos` mengembalikan `201` dengan resource di `data`; daftar mengembalikan `data` dan `meta`, sedangkan detail mengembalikan `data`. `GET /kos` menerima `page` (default `1`) dan `per_page` (default `10`, maksimum `100`); nilai tidak valid atau kurang dari `1` kembali ke default. Update memakai `PUT` dan mengembalikan resource di `data`. Delete mengembalikan pesan sukses. Pada create, hanya field nama, alamat, provinsi, kota, distrik, dan harga yang diwajibkan; `type` dan `status` opsional, tetapi bila diisi harus memakai nilai yang didukung. Pada update, `type` dan `status` wajib. `cover_photo` hanya diisi pada daftar kos: URL foto paling awal dibuat, atau `{http.url}/public/images_not_found.jpg` bila belum ada foto.
 
 ## Fasilitas
 
@@ -384,11 +395,11 @@ Contoh body create/update:
 ```json
 {
   "name": "Wi-Fi",
-  "icon": "wifi"
+  "icon": "fa-solid fa-wifi"
 }
 ```
 
-`name` wajib berupa string maksimum 255 karakter. `icon` boleh string/null maksimum 255 karakter. Create mengembalikan `201`; operasi lainnya mengembalikan resource di `data`, sedangkan delete mengembalikan `message`.
+`name` wajib berupa string maksimum 255 karakter. `icon` boleh string/null maksimum 255 karakter; untuk tampilan Font Awesome kirim nama kelas, misalnya `fa-solid fa-wifi`. API menyimpan dan mengembalikan string tersebut tanpa memvalidasi kelas icon. Create mengembalikan `201`; operasi lainnya mengembalikan resource di `data`, sedangkan delete mengembalikan `message`.
 
 ## Fasilitas Kos
 
@@ -424,7 +435,7 @@ Satu kos hanya memiliki satu kontak, yang ditentukan oleh `kos_id` dan tidak mem
 
 Kirim sebagai `multipart/form-data` dengan field file bernama `photo`. File harus berupa JPEG, PNG, atau WebP, berukuran lebih dari 0 byte dan maksimal 10 MB.
 
-Create mengembalikan `201` dan resource foto di `data`. Update mengganti foto lalu mengembalikan resource. Resource foto menyediakan `image_url`; delete mengembalikan `message`.
+Create mengembalikan `201` dan resource foto di `data`. Update mengganti foto lalu mengembalikan resource. Resource foto menyediakan `image_url` dan `public_id` bila tersedia; delete mengembalikan `message`.
 
 ## Contoh Penggunaan
 
