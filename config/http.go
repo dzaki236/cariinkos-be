@@ -1,9 +1,10 @@
 package config
 
 import (
+	"cariinkos/app/facades"
+
 	"github.com/goravel/framework/contracts/route"
 	ginfacades "github.com/goravel/gin/facades"
-	"cariinkos/app/facades"
 )
 
 func init() {
@@ -26,8 +27,8 @@ func init() {
 		"host": config.Env("APP_HOST", "127.0.0.1"),
 		// HTTP Port
 		"port": config.Env("APP_PORT", "3000"),
-		// HTTP Timeout, default is 3 seconds
-		"request_timeout": 3,
+		// HTTP request timeout in seconds
+		"request_timeout": config.Env("HTTP_REQUEST_TIMEOUT", 66),
 		// HTTPS Configuration
 		"tls": map[string]any{
 			// HTTPS Host
