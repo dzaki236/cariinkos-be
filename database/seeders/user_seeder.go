@@ -28,6 +28,7 @@ func (s *UserSeeder) Run() error {
 		{ID: uuid.NewString(), Name: "Andi Wijaya", Email: "andi@example.com", Password: password, Role: "owner"},
 		{ID: uuid.NewString(), Name: "Dewi Lestari", Email: "dewi@example.com", Password: password, Role: "owner"},
 		{ID: uuid.NewString(), Name: "Rizky Pratama", Email: "rizky@example.com", Password: password, Role: "owner"},
+		{ID: uuid.NewString(), Name: "Dzaki Ahnaf Z", Email: "dzaki236@example.com", Password: password, Role: "owner"},
 	}
 
 	for _, user := range users {

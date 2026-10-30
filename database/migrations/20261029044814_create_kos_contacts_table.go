@@ -19,6 +19,7 @@ func (r *M20261029044814CreateKosContactsTable) Up() error {
 		return facades.Schema().Create("kos_contacts", func(table schema.Blueprint) {
 			table.Uuid("id")
 			table.Uuid("kos_id")
+			table.String("contact_name")
 			table.String("phone")
 			table.String("whatsapp").Nullable()
 			table.Primary("id")
