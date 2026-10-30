@@ -26,7 +26,6 @@ func (a *Auth) Handle(ctx http.Context) {
 		return
 	}
 
-	// Parse dan validasi JWT.
 	_, err := facades.Auth(ctx).Parse(parts[1])
 
 	if err != nil {
@@ -38,7 +37,6 @@ func (a *Auth) Handle(ctx http.Context) {
 		return
 	}
 
-	// Lanjutkan ke middleware/controller berikutnya.
 	ctx.Request().Next()
 }
 

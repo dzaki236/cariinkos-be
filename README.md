@@ -1,99 +1,249 @@
-<div align="center">
+# CariinKos API Docs
 
-<img src="https://www.goravel.dev/logo.png?v=1.14.x" width="300" alt="Logo">
+Dokumentasi REST API backend CariinKos. API menggunakan JSON kecuali endpoint unggah foto dan seluruh path API diawali `/api/v1`.
 
-[![Doc](https://pkg.go.dev/badge/github.com/goravel/framework)](https://pkg.go.dev/github.com/goravel/framework)
-[![Go](https://img.shields.io/github/go-mod/go-version/goravel/framework)](https://go.dev/)
-[![Release](https://img.shields.io/github/release/goravel/framework.svg)](https://github.com/goravel/framework/releases)
-[![Test](https://github.com/goravel/framework/actions/workflows/test.yml/badge.svg)](https://github.com/goravel/framework/actions)
-[![Report Card](https://goreportcard.com/badge/github.com/goravel/framework)](https://goreportcard.com/report/github.com/goravel/framework)
-[![Codecov](https://codecov.io/gh/goravel/framework/branch/master/graph/badge.svg)](https://codecov.io/gh/goravel/framework)
-![License](https://img.shields.io/github/license/goravel/framework)
+## Base URL
 
-</div>
+```text
+http://localhost:3000/api/v1
+```
 
-English | [中文](./README_zh.md)
+Sesuaikan host dan port dengan konfigurasi deployment. Endpoint `GET /` pada base path mengembalikan `{"halo":"api"}`.
 
-## About Goravel
+## Autentikasi
 
-Goravel is a full-featured, scalable web application framework that provides a starting scaffold to help Gophers quickly build their applications.
+Endpoint login bersifat publik. Endpoint lain di modul kos dan fasilitas memerlukan JWT dengan header:
 
-The framework style is consistent with [Laravel](https://laravel.com/), so PHP developers don’t need to learn a new framework and can still enjoy playing around with Golang, in tribute to Laravel!
+```http
+Authorization: Bearer <token>
+```
 
-We welcome stars, PRs, and issues!
+Ganti `<token>` dengan JWT yang diterima dari `POST /login`. Header `Authorization` wajib berisi tepat dua bagian: skema `Bearer` dan token, dipisahkan oleh spasi. Skema tidak peka huruf besar/kecil, sehingga `Bearer` maupun `bearer` diterima. Token yang kosong, header yang tidak menggunakan format tersebut, token tidak valid, atau token kedaluwarsa menghasilkan `401 Unauthorized`.
 
-## Documentation
+Contoh respons jika format header salah atau tidak ada:
 
-Online documentation [https://www.goravel.dev](https://www.goravel.dev)
+```json
+{
+  "message": "Unauthorized",
+  "error": "Authorization header must use Bearer token format"
+}
+```
 
-Example [https://github.com/goravel/example](https://github.com/goravel/example)
+Contoh respons jika token tidak valid atau kedaluwarsa:
 
-> To optimize the documentation, please submit a PR to the documentation
-> repository [https://github.com/goravel/docs](https://github.com/goravel/docs)
+```json
+{
+  "message": "Unauthorized",
+  "error": "Invalid or expired token"
+}
+```
 
-## Main Features
+## Format Respons
 
-| Module Name | Description |
-|-------------|-------------|
-| [Artisan Console](https://www.goravel.dev/digging-deeper/artisan-console.html) | CLI command-line interface for application management and automation |
-| [Authentication](https://www.goravel.dev/security/authentication.html) | User identity verification with JWT and Session drivers |
-| [Authorization](https://www.goravel.dev/security/authorization.html) | Permission-based access control using policies and gates |
-| [Cache](https://www.goravel.dev/digging-deeper/cache.html) | Store and retrieve data using memory, Redis, or custom drivers |
-| [Carbon](https://www.goravel.dev/digging-deeper/helpers.html) | Helper functions for date and time manipulation |
-| [Config](https://www.goravel.dev/getting-started/configuration.html) | Application configuration management from files and environment |
-| [Crypt](https://www.goravel.dev/security/encryption.html) | Secure data encryption and decryption utilities |
-| [DB](https://www.goravel.dev/database/getting-started.html) | Database query builder |
-| [Event](https://www.goravel.dev/digging-deeper/event.html) | Application event dispatching and listening system |
-| [Factory](https://www.goravel.dev/orm/factories.html) | Generate fake model data for testing purposes |
-| [FileStorage](https://www.goravel.dev/digging-deeper/filesystem.html) | File upload, download, and storage across multiple drivers |
-| [Grpc](https://www.goravel.dev/the-basics/grpc.html) | High-performance gRPC server and client implementation |
-| [Hash](https://www.goravel.dev/security/hashing.html) | Secure password hashing |
-| [Http](https://www.goravel.dev/the-basics/routing.html) | HTTP routing, controllers, and middleware management |
-| [Http Client](https://www.goravel.dev/digging-deeper/http-client.html) | Make HTTP requests to external APIs and services |
-| [Localization](https://www.goravel.dev/digging-deeper/localization.html) | Multi-language translation and locale management |
-| [Logger](https://www.goravel.dev/the-basics/logging.html) | Application logging to files, console, or external services |
-| [Mail](https://www.goravel.dev/digging-deeper/mail.html) | Send emails via SMTP or queue-based delivery |
-| [Mock](https://www.goravel.dev/testing/mock.html) | Create test mocks for facades and dependencies |
-| [Migrate](https://www.goravel.dev/database/migrations.html) | Version control for database schema changes |
-| [Orm](https://www.goravel.dev/orm/getting-started.html) | Elegant Orm implementation for database operations |
-| [Package Development](https://www.goravel.dev/digging-deeper/package-development.html) | Build reusable packages to extend framework functionality |
-| [Process](https://www.goravel.dev/digging-deeper/process.html) | An expressive and elegant API around Go's standard os/exec package |
-| [Queue](https://www.goravel.dev/digging-deeper/queues.html) | Defer time-consuming tasks to background job processing |
-| [Seeder](https://www.goravel.dev/database/seeding.html) | Populate database tables with test or initial data |
-| [Session](https://www.goravel.dev/the-basics/session.html) | Manage user session data across HTTP requests |
-| [Task Scheduling](https://www.goravel.dev/digging-deeper/task-scheduling.html) | Schedule recurring tasks using cron-like expressions |
-| [Testing](https://www.goravel.dev/testing/getting-started.html) | HTTP testing, mocking, and assertion utilities |
-| [Validation](https://www.goravel.dev/the-basics/validation.html) | Validate incoming request data using rules |
-| [View](https://www.goravel.dev/the-basics/views.html) | Template rendering engine for HTML responses |
+Respons resource umumnya dibungkus dengan `data`:
 
-## Compare With Laravel
+```json
+{"data": {}}
+```
 
-[For Detail](https://www.goravel.dev/prologue/compare-with-laravel.html)
+Operasi yang tidak mengembalikan resource memberikan `message`. Validasi gagal menggunakan status `422` dan bentuk:
 
-## Roadmap
+```json
+{
+  "message": "Validation failed",
+  "errors": {}
+}
+```
 
-[For Detail](https://github.com/goravel/goravel/issues?q=is%3Aissue+is%3Aopen)
+Error umum lainnya menggunakan `message`; format detail dapat berbeda menurut endpoint. `id` resource berupa UUID dan waktu ditulis sebagai timestamp.
 
-## Excellent Extend Packages
+## Ringkasan Endpoint
 
-[For Detail](https://www.goravel.dev/getting-started/packages.html)
+Semua method dan path di bawah relatif terhadap base URL.
 
-## Contributors
+| Modul | Method | Path | Keterangan | Auth |
+|---|---|---|---|---|
+| Health | GET | `/` | Cek API | Tidak |
+| Auth | POST | `/login` | Login dan memperoleh token | Tidak |
+| Auth | POST | `/logout` | Logout | Ya |
+| Kos | GET | `/kos` | Daftar kos | Ya |
+| Kos | GET | `/kos/{id}` | Detail kos | Ya |
+| Kos | POST | `/kos` | Buat kos | Ya |
+| Kos | PUT | `/kos/{id}` | Perbarui kos | Ya |
+| Kos | DELETE | `/kos/{id}` | Hapus kos | Ya |
+| Fasilitas | GET | `/facilities` | Daftar fasilitas | Ya |
+| Fasilitas | GET | `/facilities/{id}` | Detail fasilitas | Ya |
+| Fasilitas | POST | `/facilities` | Buat fasilitas | Ya |
+| Fasilitas | PUT | `/facilities/{id}` | Perbarui fasilitas | Ya |
+| Fasilitas | DELETE | `/facilities/{id}` | Hapus fasilitas | Ya |
+| Fasilitas kos | GET | `/kos/{id}/facilities` | Daftar fasilitas pada kos | Ya |
+| Fasilitas kos | POST | `/kos/{id}/facilities` | Kaitkan fasilitas ke kos | Ya |
+| Fasilitas kos | DELETE | `/kos/{id}/facilities/{facility_id}` | Hapus fasilitas dari kos | Ya |
+| Foto kos | GET | `/kos/{id}/photos` | Daftar foto kos | Ya |
+| Foto kos | POST | `/kos/{id}/photos` | Unggah foto | Ya |
+| Foto kos | PUT | `/kos/{id}/photos/{photo_id}` | Ganti foto | Ya |
+| Foto kos | DELETE | `/kos/{id}/photos/{photo_id}` | Hapus foto | Ya |
+| Kontak kos | GET | `/kos/{id}/contacts` | Daftar kontak kos | Ya |
+| Kontak kos | POST | `/kos/{id}/contacts` | Tambah kontak | Ya |
+| Kontak kos | PUT | `/kos/{id}/contacts/{contact_id}` | Perbarui kontak | Ya |
+| Kontak kos | DELETE | `/kos/{id}/contacts/{contact_id}` | Hapus kontak | Ya |
 
-This project exists thanks to all the people who contribute, to participate in the contribution, please see [Contribution Guide](https://www.goravel.dev/prologue/contributions.html).
+## Auth
 
-## Sponsor
+### `POST /login`
 
-Better development of the project is inseparable from your support, reward us by [Open Collective](https://opencollective.com/goravel).
+Request `application/json`:
 
-<p align="left"><img src="https://www.goravel.dev/reward.png" width="200"></p>
+```json
+{
+  "email": "pemilik@example.com",
+  "password": "password"
+}
+```
 
-## Group
+`email` wajib berupa email valid dan `password` wajib berupa string.
 
-Welcome more discussion in Discord.
+Respons sukses:
 
-[https://discord.gg/cFc5csczzS](https://discord.gg/cFc5csczzS)
+```json
+{
+  "message": "Login successful",
+  "token": "<jwt>",
+  "user": {}
+}
+```
 
-## License
+Kredensial salah mengembalikan `401`.
 
-The Goravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### `POST /logout`
+
+Memerlukan Bearer token. Respons sukses: `{"message":"Logout successful"}`.
+
+## Kos
+
+### Field kos
+
+Request create dan update menerima JSON berikut. Field yang memiliki tanda `*` wajib saat create dan update; field lainnya opsional atau bernilai default nol sesuai tipe request.
+
+| Field | Tipe | Aturan |
+|---|---|---|
+| `name`* | string | Wajib, maksimum 255 karakter |
+| `description` | string/null | Opsional |
+| `address`* | string | Wajib |
+| `province`* | string | Wajib, maksimum 255 karakter |
+| `city`* | string | Wajib, maksimum 255 karakter |
+| `district`* | string | Wajib, maksimum 255 karakter |
+| `subdistrict` | string/null | Opsional |
+| `gmaps_link` | string/null | Opsional |
+| `price_monthly`* | integer | Wajib, minimal 1 |
+| `type`* | string | `mixed`, `man`, atau `woman` |
+| `status`* | string | `draft`, `published`, atau `archived` |
+| `room_size` | integer/null | Opsional |
+| `total_rooms` | integer | Opsional |
+| `available_rooms` | integer | Opsional |
+| `minimum_rent_months` | integer | Opsional |
+| `rules` | string/null | Opsional |
+
+Contoh body create/update:
+
+```json
+{
+  "name": "Kos Melati",
+  "description": "Kos dekat kampus",
+  "address": "Jl. Merdeka No. 10",
+  "province": "Jawa Barat",
+  "city": "Bandung",
+  "district": "Coblong",
+  "subdistrict": "Dago",
+  "gmaps_link": "https://maps.example/kos-melati",
+  "price_monthly": 1500000,
+  "type": "woman",
+  "status": "published",
+  "room_size": 20,
+  "total_rooms": 10,
+  "available_rooms": 2,
+  "minimum_rent_months": 1,
+  "rules": "Tidak boleh merokok"
+}
+```
+
+`POST /kos` mengembalikan `201` dengan resource di `data`; daftar dan detail mengembalikan `data`. Update memakai `PUT` dan mengembalikan resource di `data`. Delete mengembalikan pesan sukses.
+
+## Fasilitas
+
+### `POST /facilities` dan `PUT /facilities/{id}`
+
+```json
+{
+  "name": "Wi-Fi",
+  "icon": "wifi"
+}
+```
+
+`name` wajib berupa string maksimum 255 karakter. `icon` boleh string/null maksimum 255 karakter. Create mengembalikan `201`; operasi lainnya mengembalikan resource di `data`, sedangkan delete mengembalikan `message`.
+
+## Fasilitas Kos
+
+### `POST /kos/{id}/facilities`
+
+Mengaitkan fasilitas yang telah dibuat dengan kos. Body JSON:
+
+```json
+{
+  "facility_id": "<uuid-fasilitas>"
+}
+```
+
+Sukses mengembalikan `{"message":"Facility attached to kos successfully"}`. `DELETE /kos/{id}/facilities/{facility_id}` melepas relasi dan mengembalikan pesan sukses.
+
+## Kontak Kos
+
+### `POST /kos/{id}/contacts` dan `PUT /kos/{id}/contacts/{contact_id}`
+
+```json
+{
+  "phone": "+62221234567",
+  "whatsapp": "+6281234567890"
+}
+```
+
+`phone` wajib berupa string maksimum 50 karakter. `whatsapp` opsional/null maksimum 50 karakter. Create mengembalikan `201`; list, create, dan update mengembalikan resource dalam `data`; delete mengembalikan `message`.
+
+## Foto Kos
+
+### `POST /kos/{id}/photos` dan `PUT /kos/{id}/photos/{photo_id}`
+
+Kirim sebagai `multipart/form-data` dengan field file bernama `photo`. File harus berupa JPEG, PNG, atau WebP, berukuran lebih dari 0 byte dan maksimal 10 MB.
+
+Create mengembalikan `201` dan resource foto di `data`. Update mengganti foto lalu mengembalikan resource. Resource foto menyediakan `image_url`; delete mengembalikan `message`.
+
+## Contoh Penggunaan
+
+Login:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"pemilik@example.com","password":"password"}'
+```
+
+Buat kos (ganti `<token>` dengan JWT hasil login):
+
+```bash
+curl -X POST http://localhost:3000/api/v1/kos \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Kos Melati","address":"Jl. Merdeka No. 10","province":"Jawa Barat","city":"Bandung","district":"Coblong","price_monthly":1500000,"type":"woman","status":"published"}'
+```
+
+Unggah foto:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/kos/<kos-id>/photos \
+  -H "Authorization: Bearer <token>" \
+  -F "photo=@./kamar.jpg"
+```
+
+## Catatan Cakupan
+
+Dokumen ini mencakup route HTTP yang terdaftar di `routes/api.go` dan `routes/api/`. Modul internal Goravel seperti queue, cache, mail, dan database bukan endpoint HTTP aplikasi, sehingga tidak dicantumkan sebagai API.

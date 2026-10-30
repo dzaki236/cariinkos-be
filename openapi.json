@@ -1,0 +1,1304 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "CariinKos API",
+        "version": "1.0.0",
+        "description": "Dokumentasi REST API backend CariinKos. API menggunakan JSON kecuali endpoint unggah foto."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/api/v1",
+            "description": "Development server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Health"
+        },
+        {
+            "name": "Auth"
+        },
+        {
+            "name": "Kos"
+        },
+        {
+            "name": "Fasilitas"
+        },
+        {
+            "name": "Fasilitas Kos"
+        },
+        {
+            "name": "Foto Kos"
+        },
+        {
+            "name": "Kontak Kos"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Cek API",
+                "operationId": "healthCheck",
+                "responses": {
+                    "200": {
+                        "description": "API aktif",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HealthResponse"
+                                },
+                                "example": {
+                                    "halo": "api"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login dan memperoleh token",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            },
+                            "example": {
+                                "email": "pemilik@example.com",
+                                "password": "password"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "operationId": "logout",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Logout berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Logout successful"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    }
+                }
+            }
+        },
+        "/kos": {
+            "get": {
+                "tags": [
+                    "Kos"
+                ],
+                "summary": "Daftar kos",
+                "operationId": "listKos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar kos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Kos"
+                ],
+                "summary": "Buat kos",
+                "operationId": "createKos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KosRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Kos dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            }
+        },
+        "/kos/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Kos"
+                ],
+                "summary": "Detail kos",
+                "operationId": "getKos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail kos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Kos"
+                ],
+                "summary": "Perbarui kos",
+                "operationId": "updateKos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KosRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Kos diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Kos"
+                ],
+                "summary": "Hapus kos",
+                "operationId": "deleteKos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kos dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        },
+        "/facilities": {
+            "get": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Daftar fasilitas",
+                "operationId": "listFacilities",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Daftar fasilitas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Buat fasilitas",
+                "operationId": "createFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FacilityRequest"
+                            },
+                            "example": {
+                                "name": "Wi-Fi",
+                                "icon": "wifi"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Fasilitas dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            }
+        },
+        "/facilities/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Detail fasilitas",
+                "operationId": "getFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detail fasilitas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Perbarui fasilitas",
+                "operationId": "updateFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FacilityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Hapus fasilitas",
+                "operationId": "deleteFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/facilities": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Fasilitas Kos"
+                ],
+                "summary": "Daftar fasilitas pada kos",
+                "operationId": "listKosFacilities",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas pada kos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Fasilitas Kos"
+                ],
+                "summary": "Kaitkan fasilitas ke kos",
+                "operationId": "attachKosFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AttachFacilityRequest"
+                            },
+                            "example": {
+                                "facility_id": "123e4567-e89b-12d3-a456-426614174000"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas dikaitkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                },
+                                "example": {
+                                    "message": "Facility attached to kos successfully"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/facilities/{facility_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "name": "facility_id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            ],
+            "delete": {
+                "tags": [
+                    "Fasilitas Kos"
+                ],
+                "summary": "Hapus fasilitas dari kos",
+                "operationId": "detachKosFacility",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Relasi fasilitas dilepas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/photos": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Foto Kos"
+                ],
+                "summary": "Daftar foto kos",
+                "operationId": "listKosPhotos",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Foto kos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Foto Kos"
+                ],
+                "summary": "Unggah foto kos",
+                "operationId": "uploadKosPhoto",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PhotoUpload"
+                },
+                "responses": {
+                    "201": {
+                        "description": "Foto dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/photos/{photo_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "name": "photo_id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            ],
+            "put": {
+                "tags": [
+                    "Foto Kos"
+                ],
+                "summary": "Ganti foto kos",
+                "operationId": "replaceKosPhoto",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PhotoUpload"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Foto diganti",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Foto Kos"
+                ],
+                "summary": "Hapus foto kos",
+                "operationId": "deleteKosPhoto",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Foto dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/contacts": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Kontak Kos"
+                ],
+                "summary": "Daftar kontak kos",
+                "operationId": "listKosContacts",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kontak kos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Kontak Kos"
+                ],
+                "summary": "Tambah kontak kos",
+                "operationId": "createKosContact",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KosContactRequest"
+                            },
+                            "example": {
+                                "phone": "+62221234567",
+                                "whatsapp": "+6281234567890"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Kontak dibuat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            }
+        },
+        "/kos/{id}/contacts/{contact_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "name": "contact_id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            ],
+            "put": {
+                "tags": [
+                    "Kontak Kos"
+                ],
+                "summary": "Perbarui kontak kos",
+                "operationId": "updateKosContact",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/KosContactRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Kontak diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Kontak Kos"
+                ],
+                "summary": "Hapus kontak kos",
+                "operationId": "deleteKosContact",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kontak dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Gunakan token JWT dari endpoint login. Skema Bearer tidak peka huruf besar/kecil."
+            }
+        },
+        "parameters": {
+            "Id": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "description": "UUID resource"
+            }
+        },
+        "requestBodies": {
+            "PhotoUpload": {
+                "required": true,
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "photo"
+                            ],
+                            "properties": {
+                                "photo": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "JPEG, PNG, atau WebP; ukuran lebih dari 0 byte dan maksimal 10 MB.",
+                                    "maxLength": 10485760
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "Unauthorized": {
+                "description": "Token tidak ada, format salah, tidak valid, atau kedaluwarsa",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorResponse"
+                        },
+                        "examples": {
+                            "format": {
+                                "value": {
+                                    "message": "Unauthorized",
+                                    "error": "Authorization header must use Bearer token format"
+                                }
+                            },
+                            "token": {
+                                "value": {
+                                    "message": "Unauthorized",
+                                    "error": "Invalid or expired token"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ValidationFailed": {
+                "description": "Validasi gagal",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ValidationErrorResponse"
+                        },
+                        "example": {
+                            "message": "Validation failed",
+                            "errors": {}
+                        }
+                    }
+                }
+            },
+            "NotFound": {
+                "description": "Resource tidak ditemukan",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ErrorResponse"
+                        },
+                        "example": {
+                            "message": "Resource not found"
+                        }
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "HealthResponse": {
+                "type": "object",
+                "required": [
+                    "halo"
+                ],
+                "properties": {
+                    "halo": {
+                        "type": "string",
+                        "example": "api"
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LoginResponse": {
+                "type": "object",
+                "required": [
+                    "message",
+                    "token",
+                    "user"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Login successful"
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "JWT"
+                    },
+                    "user": {
+                        "type": "object",
+                        "additionalProperties": true
+                    }
+                }
+            },
+            "KosRequest": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "address",
+                    "province",
+                    "city",
+                    "district",
+                    "price_monthly",
+                    "type",
+                    "status"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "province": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "city": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "district": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "subdistrict": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "gmaps_link": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "price_monthly": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "mixed",
+                            "man",
+                            "woman"
+                        ]
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "draft",
+                            "published",
+                            "archived"
+                        ]
+                    },
+                    "room_size": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "total_rooms": {
+                        "type": "integer"
+                    },
+                    "available_rooms": {
+                        "type": "integer"
+                    },
+                    "minimum_rent_months": {
+                        "type": "integer"
+                    },
+                    "rules": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "FacilityRequest": {
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "icon": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 255
+                    }
+                }
+            },
+            "AttachFacilityRequest": {
+                "type": "object",
+                "required": [
+                    "facility_id"
+                ],
+                "properties": {
+                    "facility_id": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            },
+            "KosContactRequest": {
+                "type": "object",
+                "required": [
+                    "phone"
+                ],
+                "properties": {
+                    "phone": {
+                        "type": "string",
+                        "maxLength": 50
+                    },
+                    "whatsapp": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 50
+                    }
+                }
+            },
+            "MessageResponse": {
+                "type": "object",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "DataResponse": {
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "properties": {
+                    "data": {
+                        "description": "Resource atau daftar resource sesuai endpoint.",
+                        "oneOf": [
+                            {
+                                "type": "object",
+                                "additionalProperties": true
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "additionalProperties": true
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": true
+            },
+            "ValidationErrorResponse": {
+                "type": "object",
+                "required": [
+                    "message",
+                    "errors"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Validation failed"
+                    },
+                    "errors": {
+                        "type": "object",
+                        "additionalProperties": true
+                    }
+                }
+            }
+        }
+    }
+}

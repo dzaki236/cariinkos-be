@@ -14,6 +14,9 @@ func Api() {
 		router.Get("/", func(ctx http.Context) http.Response {
 			return ctx.Response().Success().Json(http.Json{"halo": "api"})
 		})
+		router.Get("/docs", func(ctx http.Context) http.Response {
+			return ctx.Response().View().Make("apidocs.tmpl", map[string]any{})
+		})
 		apiRoutes.AuthRoutes(router)
 		router.Middleware(middleware.NewHandleAuth()).Group(func(router route.Router) {
 			apiRoutes.KosRoutes(router)
