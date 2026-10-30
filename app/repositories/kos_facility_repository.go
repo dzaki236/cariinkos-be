@@ -15,7 +15,10 @@ func NewKosFacilityRepository() *KosFacilityRepository {
 
 func (r *KosFacilityRepository) GetAllByKosID(kosID string) ([]models.Facility, error) {
 	var facilities []models.Facility
-	err := facades.Orm().Query().Where("kos_id = ?", kosID).Join("JOIN facilities ON facilities.id = kos_facilities.facility_id").Find(&facilities)
+	err := facades.Orm().Query().Table("kos_facilities").
+		Join("JOIN facilities ON facilities.id = kos_facilities.facility_id").
+		Where("kos_facilities.kos_id = ?", kosID).
+		Select("facilities.*").Find(&facilities)
 	return facilities, err
 }
 

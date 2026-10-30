@@ -35,7 +35,7 @@ func (c *KosPhotoController) Store(ctx http.Context) http.Response {
 	if err := validatePhotoFile(file); err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": err.Error()})
 	}
-	photo, err := c.service.Create(id, dto.CreateKosPhotoRequest{File: file})
+	photo, err := c.service.Create(ctx.Context(), id, dto.CreateKosPhotoRequest{File: file})
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -51,7 +51,7 @@ func (c *KosPhotoController) Update(ctx http.Context) http.Response {
 	if err := validatePhotoFile(file); err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": err.Error()})
 	}
-	photo, err := c.service.Update(id, ctx.Request().Route("photo_id"), dto.UpdateKosPhotoRequest{File: file})
+	photo, err := c.service.Update(ctx.Context(), id, ctx.Request().Route("photo_id"), dto.UpdateKosPhotoRequest{File: file})
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -60,7 +60,7 @@ func (c *KosPhotoController) Update(ctx http.Context) http.Response {
 
 func (c *KosPhotoController) Destroy(ctx http.Context) http.Response {
 	id := ctx.Request().Route("id")
-	if err := c.service.Delete(id, ctx.Request().Route("photo_id")); err != nil {
+	if err := c.service.Delete(ctx.Context(), id, ctx.Request().Route("photo_id")); err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
 	return ctx.Response().Success().Json(http.Json{"message": "Kos photo deleted successfully"})
