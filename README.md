@@ -12,7 +12,7 @@ Sesuaikan host dan port dengan konfigurasi deployment. Endpoint `GET /` pada bas
 
 ## Autentikasi
 
-Endpoint login bersifat publik. Endpoint lain di modul kos dan fasilitas memerlukan JWT dengan header:
+Endpoint login dan dokumentasi bersifat publik. Semua endpoint kos dan fasilitas memerlukan JWT dengan header:
 
 ```http
 Authorization: Bearer <token>
@@ -43,7 +43,25 @@ Contoh respons jika token tidak valid atau kedaluwarsa:
 Respons resource umumnya dibungkus dengan `data`:
 
 ```json
-{"data": {}}
+{
+  "data": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "user_id": "123e4567-e89b-12d3-a456-426614174001",
+    "name": "Kos Melati",
+    "address": "Jl. Merdeka No. 10",
+    "province": "Jawa Barat",
+    "city": "Bandung",
+    "district": "Coblong",
+    "price_monthly": 1500000,
+    "total_rooms": 10,
+    "available_rooms": 2,
+    "minimum_rent_months": 1,
+    "type": "woman",
+    "status": "published",
+    "created_at": "2026-10-30T08:00:00Z",
+    "updated_at": "2026-10-30T08:00:00Z"
+  }
+}
 ```
 
 Operasi yang tidak mengembalikan resource memberikan `message`. Validasi gagal menggunakan status `422` dan bentuk:
@@ -55,7 +73,190 @@ Operasi yang tidak mengembalikan resource memberikan `message`. Validasi gagal m
 }
 ```
 
-Error umum lainnya menggunakan `message`; format detail dapat berbeda menurut endpoint. `id` resource berupa UUID dan waktu ditulis sebagai timestamp.
+Error umum lainnya menggunakan `message`; format detail dapat berbeda menurut endpoint. `id` resource berupa UUID dan waktu ditulis sebagai timestamp. Respons daftar kos juga menyertakan metadata pagination (`page`, `per_page`, `total`, `last_page`).
+
+## Contoh Response
+
+Contoh berikut memakai nilai ilustratif. Field relasi seperti `user`, `facilities`, `contact`, dan `photos` hanya muncul bila dimuat oleh endpoint; field opsional yang kosong dapat tidak disertakan. `cover_photo` tersedia pada daftar kos (`GET /kos`): nilainya URL foto kos yang paling awal dibuat, atau URL gambar fallback bila belum ada foto. Endpoint kos lain saat ini tidak mengisi field tersebut.
+
+### Login berhasil (`200`)
+
+```json
+{
+  "message": "Login successful",
+  "token": "<jwt>",
+  "user": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "name": "Pemilik Kos",
+    "email": "pemilik@example.com",
+    "created_at": "2026-10-30T08:00:00Z",
+    "updated_at": "2026-10-30T08:00:00Z"
+  }
+}
+```
+
+### Daftar kos kosong (`GET /kos`, `200`)
+
+```json
+{"data": [], "meta": {"page": 1, "per_page": 10, "total": 0, "last_page": 0}}
+```
+
+### Resource kos (`POST /kos` mengembalikan `201`, `PUT /kos/{id}` mengembalikan `200`)
+
+```json
+{
+  "data": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "user_id": "123e4567-e89b-12d3-a456-426614174001",
+    "name": "Kos Melati",
+    "address": "Jl. Merdeka No. 10",
+    "province": "Jawa Barat",
+    "city": "Bandung",
+    "district": "Coblong",
+    "price_monthly": 1500000,
+    "total_rooms": 10,
+    "available_rooms": 2,
+    "minimum_rent_months": 1,
+    "type": "woman",
+    "status": "published",
+    "cover_photo": "https://example.com/kos-melati/kamar.jpg",
+    "created_at": "2026-10-30T08:00:00Z",
+    "updated_at": "2026-10-30T08:00:00Z"
+  }
+}
+```
+
+### Detail kos (`GET /kos/{id}`, `200`)
+
+Detail kos menyertakan relasi pemilik, fasilitas, kontak, dan foto yang dimuat oleh endpoint.
+
+```json
+{
+  "data": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "user_id": "123e4567-e89b-12d3-a456-426614174001",
+    "name": "Kos Melati",
+    "address": "Jl. Merdeka No. 10",
+    "province": "Jawa Barat",
+    "city": "Bandung",
+    "district": "Coblong",
+    "price_monthly": 1500000,
+    "total_rooms": 10,
+    "available_rooms": 2,
+    "minimum_rent_months": 1,
+    "type": "woman",
+    "status": "published",
+    "created_at": "2026-10-30T08:00:00Z",
+    "updated_at": "2026-10-30T08:00:00Z",
+    "user": {
+      "id": "123e4567-e89b-12d3-a456-426614174001",
+      "name": "Pemilik Kos",
+      "email": "pemilik@example.com",
+      "role": "owner",
+      "created_at": "2026-10-30T08:00:00Z",
+      "updated_at": "2026-10-30T08:00:00Z"
+    },
+    "facilities": [
+      {
+        "id": "123e4567-e89b-12d3-a456-426614174002",
+        "name": "Wi-Fi",
+        "icon": "wifi",
+        "created_at": "2026-10-30T08:00:00Z",
+        "updated_at": "2026-10-30T08:00:00Z"
+      }
+    ],
+    "contact": {
+      "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+      "contact_name": "Penjaga Kos",
+      "phone": "+62221234567",
+      "whatsapp": "+6281234567890",
+      "created_at": "2026-10-30T08:00:00Z",
+      "updated_at": "2026-10-30T08:00:00Z"
+    },
+    "photos": [
+      {
+        "id": "123e4567-e89b-12d3-a456-426614174003",
+        "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+        "image_url": "https://example.com/kos-melati/kamar.jpg",
+        "created_at": "2026-10-30T08:00:00Z",
+        "updated_at": "2026-10-30T08:00:00Z"
+      }
+    ]
+  }
+}
+```
+
+### Fasilitas dibuat (`201`)
+
+```json
+{
+  "data": {
+    "id": "123e4567-e89b-12d3-a456-426614174002",
+    "name": "Wi-Fi",
+    "icon": "wifi",
+    "created_at": "2026-10-30T08:00:00Z",
+    "updated_at": "2026-10-30T08:00:00Z"
+  }
+}
+```
+
+### Kontak kos dibuat (`201`)
+
+```json
+{
+  "data": {
+    "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+    "contact_name": "Penjaga Kos",
+    "phone": "+62221234567",
+    "whatsapp": "+6281234567890",
+    "created_at": "2026-10-30T08:00:00Z",
+    "updated_at": "2026-10-30T08:00:00Z"
+  }
+}
+```
+
+### Foto kos diunggah (`201`)
+
+```json
+{
+  "data": {
+    "id": "123e4567-e89b-12d3-a456-426614174003",
+    "kos_id": "123e4567-e89b-12d3-a456-426614174000",
+    "image_url": "https://example.com/kos-melati/kamar.jpg",
+    "created_at": "2026-10-30T08:00:00Z",
+    "updated_at": "2026-10-30T08:00:00Z"
+  }
+}
+```
+
+### Fasilitas dikaitkan (`201`)
+
+```json
+{"message":"Facility attached to kos successfully"}
+```
+
+### Validasi gagal (`422`)
+
+```json
+{
+  "message": "Validation failed",
+  "errors": {
+    "name": ["The name field is required."]
+  }
+}
+```
+
+### Kredensial login salah (`401`)
+
+```json
+{"message":"Invalid email or password"}
+```
+
+### Resource tidak ditemukan (`404`)
+
+```json
+{"message":"Resource not found"}
+```
 
 ## Ringkasan Endpoint
 
@@ -66,6 +267,7 @@ Semua method dan path di bawah relatif terhadap base URL.
 | Health | GET | `/` | Cek API | Tidak |
 | Auth | POST | `/login` | Login dan memperoleh token | Tidak |
 | Auth | POST | `/logout` | Logout | Ya |
+| Dokumentasi | GET | `/docs` | Halaman dokumentasi API | Tidak |
 | Kos | GET | `/kos` | Daftar kos | Ya |
 | Kos | GET | `/kos/{id}` | Detail kos | Ya |
 | Kos | POST | `/kos` | Buat kos | Ya |
@@ -77,7 +279,7 @@ Semua method dan path di bawah relatif terhadap base URL.
 | Fasilitas | PUT | `/facilities/{id}` | Perbarui fasilitas | Ya |
 | Fasilitas | DELETE | `/facilities/{id}` | Hapus fasilitas | Ya |
 | Fasilitas kos | GET | `/kos/{id}/facilities` | Daftar fasilitas pada kos | Ya |
-| Fasilitas kos | POST | `/kos/{id}/facilities` | Kaitkan fasilitas ke kos | Ya |
+| Fasilitas kos | POST | `/kos/{id}/facilities` | Kaitkan fasilitas ke kos (`201`) | Ya |
 | Fasilitas kos | DELETE | `/kos/{id}/facilities/{facility_id}` | Hapus fasilitas dari kos | Ya |
 | Foto kos | GET | `/kos/{id}/photos` | Daftar foto kos | Ya |
 | Foto kos | POST | `/kos/{id}/photos` | Unggah foto | Ya |
@@ -101,7 +303,7 @@ Request `application/json`:
 }
 ```
 
-`email` wajib berupa email valid dan `password` wajib berupa string.
+`email` wajib berupa email valid dan `password` wajib berupa string. Kegagalan validasi mengembalikan `422`; kredensial salah mengembalikan `401` dengan `{"message":"Invalid email or password"}`.
 
 Respons sukses:
 
@@ -109,7 +311,13 @@ Respons sukses:
 {
   "message": "Login successful",
   "token": "<jwt>",
-  "user": {}
+  "user": {
+    "id": "123e4567-e89b-12d3-a456-426614174001",
+    "name": "Pemilik Kos",
+    "email": "pemilik@example.com",
+    "created_at": "2026-10-30T08:00:00Z",
+    "updated_at": "2026-10-30T08:00:00Z"
+  }
 }
 ```
 
@@ -167,7 +375,7 @@ Contoh body create/update:
 }
 ```
 
-`POST /kos` mengembalikan `201` dengan resource di `data`; daftar dan detail mengembalikan `data`. Update memakai `PUT` dan mengembalikan resource di `data`. Delete mengembalikan pesan sukses.
+`POST /kos` mengembalikan `201` dengan resource di `data`; daftar mengembalikan `data` dan `meta`, sedangkan detail mengembalikan `data`. `GET /kos` menerima `page` (default `1`) dan `per_page` (default `10`, maksimum `100`); nilai tidak valid atau kurang dari `1` kembali ke default. Update memakai `PUT` dan mengembalikan resource di `data`. Delete mengembalikan pesan sukses. Pada create, hanya field nama, alamat, provinsi, kota, distrik, dan harga yang diwajibkan; `type` dan `status` bila diisi harus menggunakan nilai yang didukung. Pada update, `type` dan `status` juga wajib.
 
 ## Fasilitas
 
@@ -194,7 +402,7 @@ Mengaitkan fasilitas yang telah dibuat dengan kos. Body JSON:
 }
 ```
 
-Sukses mengembalikan `{"message":"Facility attached to kos successfully"}`. `DELETE /kos/{id}/facilities/{facility_id}` melepas relasi dan mengembalikan pesan sukses.
+Sukses mengembalikan status `201` dan `{"message":"Facility attached to kos successfully"}`. `facility_id` diwajibkan sebagai string (bukan validasi format UUID); ID yang tidak ditemukan dapat mengembalikan `404`. `DELETE /kos/{id}/facilities/{facility_id}` melepas relasi dan mengembalikan `{"message":"Facility detached from kos successfully"}`.
 
 ## Kontak Kos
 
