@@ -12,7 +12,7 @@ import (
 func Api() {
 	facades.Route().Prefix("api/v1").Group(func(router route.Router) {
 		router.Get("/", func(ctx http.Context) http.Response {
-			return ctx.Response().Success().Json(http.Json{"halo": "api"})
+			return ctx.Response().Status(http.StatusCreated).Json(http.Json{"status": "ok"})
 		})
 		router.Get("/docs", func(ctx http.Context) http.Response {
 			return ctx.Response().View().Make("apidocs.tmpl", map[string]any{})
