@@ -109,8 +109,8 @@
                                         "id": "123e4567-e89b-12d3-a456-426614174001",
                                         "name": "Pemilik Kos",
                                         "email": "pemilik@example.com",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -232,8 +232,8 @@
                                             "status": "published",
                                             "rules": "Tidak boleh merokok",
                                             "cover_photo": "https://example.com/kos-melati/kamar.jpg",
-                                            "created_at": "2026-10-30T08:00:00Z",
-                                            "updated_at": "2026-10-30T08:00:00Z"
+                                            "created_at": "0000-00-00T07:00:00Z",
+                                            "updated_at": "0000-00-00T07:00:00Z"
                                         }
                                     ],
                                     "meta": {
@@ -300,8 +300,8 @@
                                         "type": "woman",
                                         "status": "published",
                                         "rules": "Tidak boleh merokok",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -361,23 +361,23 @@
                                         "type": "woman",
                                         "status": "published",
                                         "rules": "Tidak boleh merokok",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z",
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z",
                                         "user": {
                                             "id": "123e4567-e89b-12d3-a456-426614174001",
                                             "name": "Pemilik Kos",
                                             "email": "pemilik@example.com",
                                             "role": "owner",
-                                            "created_at": "2026-10-30T08:00:00Z",
-                                            "updated_at": "2026-10-30T08:00:00Z"
+                                            "created_at": "0000-00-00T07:00:00Z",
+                                            "updated_at": "0000-00-00T07:00:00Z"
                                         },
                                         "facilities": [
                                             {
                                                 "id": "123e4567-e89b-12d3-a456-426614174002",
                                                 "name": "Wi-Fi",
                                                 "icon": "fa-solid fa-wifi",
-                                                "created_at": "2026-10-30T08:00:00Z",
-                                                "updated_at": "2026-10-30T08:00:00Z"
+                                                "created_at": "0000-00-00T07:00:00Z",
+                                                "updated_at": "0000-00-00T07:00:00Z"
                                             }
                                         ],
                                         "contact": {
@@ -385,8 +385,8 @@
                                             "contact_name": "Penjaga Kos",
                                             "phone": "+62221234567",
                                             "whatsapp": "+6281234567890",
-                                            "created_at": "2026-10-30T08:00:00Z",
-                                            "updated_at": "2026-10-30T08:00:00Z"
+                                            "created_at": "0000-00-00T07:00:00Z",
+                                            "updated_at": "0000-00-00T07:00:00Z"
                                         },
                                         "photos": [
                                             {
@@ -394,8 +394,8 @@
                                                 "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                                 "image_url": "https://example.com/kos-melati/kamar.jpg",
                                                 "public_id": "koskita/photos/kos-melati-kamar",
-                                                "created_at": "2026-10-30T08:00:00Z",
-                                                "updated_at": "2026-10-30T08:00:00Z"
+                                                "created_at": "0000-00-00T07:00:00Z",
+                                                "updated_at": "0000-00-00T07:00:00Z"
                                             }
                                         ]
                                     }
@@ -473,8 +473,8 @@
                                         "type": "woman",
                                         "status": "published",
                                         "rules": "Tidak boleh merokok",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -551,8 +551,8 @@
                                             "id": "123e4567-e89b-12d3-a456-426614174002",
                                             "name": "Wi-Fi",
                                             "icon": "fa-solid fa-wifi",
-                                            "created_at": "2026-10-30T08:00:00Z",
-                                            "updated_at": "2026-10-30T08:00:00Z"
+                                            "created_at": "0000-00-00T07:00:00Z",
+                                            "updated_at": "0000-00-00T07:00:00Z"
                                         }
                                     ]
                                 }
@@ -602,8 +602,8 @@
                                         "id": "123e4567-e89b-12d3-a456-426614174002",
                                         "name": "Wi-Fi",
                                         "icon": "fa-solid fa-wifi",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -648,8 +648,8 @@
                                         "id": "123e4567-e89b-12d3-a456-426614174002",
                                         "name": "Wi-Fi",
                                         "icon": "fa-solid fa-wifi",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -697,8 +697,8 @@
                                         "id": "123e4567-e89b-12d3-a456-426614174002",
                                         "name": "Wi-Fi",
                                         "icon": "fa-solid fa-wifi",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -780,8 +780,8 @@
                                             "id": "123e4567-e89b-12d3-a456-426614174002",
                                             "name": "Wi-Fi",
                                             "icon": "fa-solid fa-wifi",
-                                            "created_at": "2026-10-30T08:00:00Z",
-                                            "updated_at": "2026-10-30T08:00:00Z"
+                                            "created_at": "0000-00-00T07:00:00Z",
+                                            "updated_at": "0000-00-00T07:00:00Z"
                                         }
                                     ]
                                 }
@@ -941,8 +941,8 @@
                                             "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                             "image_url": "https://example.com/kos-melati/kamar.jpg",
                                             "public_id": "koskita/photos/kos-melati-kamar",
-                                            "created_at": "2026-10-30T08:00:00Z",
-                                            "updated_at": "2026-10-30T08:00:00Z"
+                                            "created_at": "0000-00-00T07:00:00Z",
+                                            "updated_at": "0000-00-00T07:00:00Z"
                                         }
                                     ]
                                 }
@@ -985,8 +985,8 @@
                                         "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                         "image_url": "https://example.com/kos-melati/kamar.jpg",
                                         "public_id": "koskita/photos/kos-melati-kamar",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -1071,8 +1071,8 @@
                                         "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                         "image_url": "https://example.com/kos-melati/kamar.jpg",
                                         "public_id": "koskita/photos/kos-melati-kamar",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -1178,8 +1178,8 @@
                                         "contact_name": "Penjaga Kos",
                                         "phone": "+62221234567",
                                         "whatsapp": "+6281234567890",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -1233,8 +1233,8 @@
                                         "contact_name": "Penjaga Kos",
                                         "phone": "+62221234567",
                                         "whatsapp": "+6281234567890",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -1291,8 +1291,8 @@
                                         "contact_name": "Penjaga Kos",
                                         "phone": "+62221234567",
                                         "whatsapp": "+6281234567890",
-                                        "created_at": "2026-10-30T08:00:00Z",
-                                        "updated_at": "2026-10-30T08:00:00Z"
+                                        "created_at": "0000-00-00T07:00:00Z",
+                                        "updated_at": "0000-00-00T07:00:00Z"
                                     }
                                 }
                             }
@@ -1659,12 +1659,12 @@
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     },
                     "updated_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     }
                 }
             },
@@ -1699,12 +1699,12 @@
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     },
                     "updated_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     }
                 }
             },
@@ -1937,12 +1937,12 @@
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     },
                     "updated_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     },
                     "user": {
                         "$ref": "#/components/schemas/KosOwner"
@@ -1990,12 +1990,12 @@
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     },
                     "updated_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     }
                 }
             },
@@ -2029,12 +2029,12 @@
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     },
                     "updated_at": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2026-10-30T08:00:00Z"
+                        "example": "0000-00-00T07:00:00Z"
                     }
                 }
             },
@@ -2046,8 +2046,8 @@
                     "id": "123e4567-e89b-12d3-a456-426614174001",
                     "name": "Pemilik Kos",
                     "email": "pemilik@example.com",
-                    "created_at": "2026-10-30T08:00:00Z",
-                    "updated_at": "2026-10-30T08:00:00Z"
+                    "created_at": "0000-00-00T07:00:00Z",
+                    "updated_at": "0000-00-00T07:00:00Z"
                 }
             },
             "MessageResponse": {
