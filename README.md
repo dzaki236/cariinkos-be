@@ -188,7 +188,7 @@ Detail kos menyertakan relasi pemilik, fasilitas, kontak, dan foto yang dimuat o
         "id": "123e4567-e89b-12d3-a456-426614174003",
         "kos_id": "123e4567-e89b-12d3-a456-426614174000",
         "image_url": "https://example.com/kos-melati/kamar.jpg",
-        "public_id": "koskita/photos/kos-melati-kamar",
+        "public_id": "cariinkos/photos/kos-melati-kamar",
         "created_at": "2026-10-30T08:00:00Z",
         "updated_at": "2026-10-30T08:00:00Z"
       }
@@ -355,8 +355,8 @@ Request create dan update menerima JSON berikut. Field yang memiliki tanda `*` w
 | `subdistrict` | string/null | Opsional |
 | `gmaps_link` | string/null | Opsional |
 | `price_monthly`* | integer | Wajib, minimal 1 |
-| `type`* | string | `mixed`, `man`, atau `woman` |
-| `status`* | string | `draft`, `published`, atau `archived` |
+| `type` | string | Opsional saat create; jika dikirim, hanya `mixed`, `man`, atau `woman` yang diterima. Wajib saat update dan nilainya harus salah satu dari ketiga value tersebut. |
+| `status` | string | Opsional saat create; jika dikirim, hanya `draft`, `published`, atau `archived` yang diterima. Saat update wajib dan hanya `draft` atau `published` yang diterima (`archived` ditolak). |
 | `room_size` | integer/null | Opsional |
 | `total_rooms` | integer | Opsional |
 | `available_rooms` | integer | Opsional |
@@ -386,7 +386,7 @@ Contoh body create/update:
 }
 ```
 
-`POST /kos` mengembalikan `201` dengan resource di `data`; daftar mengembalikan `data` dan `meta`, sedangkan detail mengembalikan `data`. `GET /kos` menerima `page` (default `1`) dan `per_page` (default `10`, maksimum `100`); nilai tidak valid atau kurang dari `1` kembali ke default. Update memakai `PUT` dan mengembalikan resource di `data`. Delete mengembalikan pesan sukses. Pada create, hanya field nama, alamat, provinsi, kota, distrik, dan harga yang diwajibkan; `type` dan `status` opsional, tetapi bila diisi harus memakai nilai yang didukung. Pada update, `type` dan `status` wajib. `cover_photo` hanya diisi pada daftar kos: URL foto paling awal dibuat, atau `{http.url}/public/images_not_found.jpg` bila belum ada foto.
+`POST /kos` mengembalikan `201` dengan resource di `data`; daftar mengembalikan `data` dan `meta`, sedangkan detail mengembalikan `data`. `GET /kos` menerima `page` (default `1`) dan `per_page` (default `10`, maksimum `100`); nilai tidak valid atau kurang dari `1` kembali ke default. Update memakai `PUT` dan mengembalikan resource di `data`. Delete mengembalikan pesan sukses. Pada create, hanya field nama, alamat, provinsi, kota, distrik, dan harga yang diwajibkan; `type` dan `status` opsional, tetapi bila diisi harus memakai nilai enum yang didukung dan value lain ditolak. Pada update, `type` dan `status` wajib; `status` update hanya menerima `draft` atau `published`, meskipun enum database juga memiliki `archived`. `cover_photo` hanya diisi pada daftar kos: URL foto paling awal dibuat, atau `{http.url}/public/images_not_found.jpg` bila belum ada foto.
 
 ## Fasilitas
 

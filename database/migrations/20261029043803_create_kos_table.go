@@ -28,8 +28,8 @@ func (r *M20261029043803CreateKosTable) Up() error {
 			table.String("subdistrict").Nullable() //kelurahan
 			table.String("gmaps_link").Nullable()  //link gmaps
 			table.UnsignedBigInteger("price_monthly")
-			table.String("type").Default("mixed") //mixed, man, woman
-			table.String("status").Default("draft")
+			table.Enum("type", []any{"mixed", "man", "woman"}).Default("mixed")
+			table.Enum("status", []any{"draft", "published", "archived"}).Default("draft")
 			table.UnsignedBigInteger("room_size").Nullable()
 			table.UnsignedBigInteger("total_rooms").Default(0)
 			table.UnsignedBigInteger("available_rooms").Default(0)

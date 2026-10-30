@@ -393,7 +393,7 @@
                                                 "id": "123e4567-e89b-12d3-a456-426614174003",
                                                 "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                                 "image_url": "https://example.com/kos-melati/kamar.jpg",
-                                                "public_id": "koskita/photos/kos-melati-kamar",
+                                                "public_id": "cariinkos/photos/kos-melati-kamar",
                                                 "created_at": "0000-00-00T07:00:00Z",
                                                 "updated_at": "0000-00-00T07:00:00Z"
                                             }
@@ -940,7 +940,7 @@
                                             "id": "123e4567-e89b-12d3-a456-426614174003",
                                             "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                             "image_url": "https://example.com/kos-melati/kamar.jpg",
-                                            "public_id": "koskita/photos/kos-melati-kamar",
+                                            "public_id": "cariinkos/photos/kos-melati-kamar",
                                             "created_at": "0000-00-00T07:00:00Z",
                                             "updated_at": "0000-00-00T07:00:00Z"
                                         }
@@ -984,7 +984,7 @@
                                         "id": "123e4567-e89b-12d3-a456-426614174003",
                                         "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                         "image_url": "https://example.com/kos-melati/kamar.jpg",
-                                        "public_id": "koskita/photos/kos-melati-kamar",
+                                        "public_id": "cariinkos/photos/kos-melati-kamar",
                                         "created_at": "0000-00-00T07:00:00Z",
                                         "updated_at": "0000-00-00T07:00:00Z"
                                     }
@@ -1070,7 +1070,7 @@
                                         "id": "123e4567-e89b-12d3-a456-426614174003",
                                         "kos_id": "123e4567-e89b-12d3-a456-426614174000",
                                         "image_url": "https://example.com/kos-melati/kamar.jpg",
-                                        "public_id": "koskita/photos/kos-melati-kamar",
+                                        "public_id": "cariinkos/photos/kos-melati-kamar",
                                         "created_at": "0000-00-00T07:00:00Z",
                                         "updated_at": "0000-00-00T07:00:00Z"
                                     }
@@ -1543,6 +1543,7 @@
                     },
                     "type": {
                         "type": "string",
+                        "description": "Opsional saat create; jika dikirim, hanya mixed, man, atau woman yang diterima. Wajib saat update.",
                         "enum": [
                             "mixed",
                             "man",
@@ -1551,6 +1552,7 @@
                     },
                     "status": {
                         "type": "string",
+                        "description": "Opsional saat create; jika dikirim, hanya draft, published, atau archived yang diterima. Wajib saat update; update hanya menerima draft atau published (archived ditolak).",
                         "enum": [
                             "draft",
                             "published",

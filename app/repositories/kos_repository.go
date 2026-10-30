@@ -21,7 +21,7 @@ func NewKosRepository() *KosRepository {
 func (r *KosRepository) GetAllData(page, perPage int) ([]models.Kos, int64, error) {
 	var dataKos []models.Kos
 	var total int64
-	err := facades.Orm().Query().Order("created_at desc").Paginate(page, perPage, &dataKos, &total)
+	err := facades.Orm().Query().With("User").Order("created_at desc").Paginate(page, perPage, &dataKos, &total)
 	if err != nil {
 		return nil, 0, err
 	}

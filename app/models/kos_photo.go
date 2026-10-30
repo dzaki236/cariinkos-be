@@ -15,7 +15,7 @@ type KosPhoto struct {
 	CreatedAt time.Time `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt time.Time `gorm:"column:updated_at" json:"updated_at"`
 
-	Kos Kos `gorm:"foreignKey:KosID;references:ID" json:"kos,omitempty"`
+	// Kos Kos `gorm:"foreignKey:KosID;references:ID" json:"kos,omitempty"`
 }
 
 func (KosPhoto) TableName() string {

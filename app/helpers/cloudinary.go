@@ -45,7 +45,7 @@ func (u *CloudinaryPhotoUploader) Upload(ctx context.Context, filePath string) (
 	defer file.Close()
 	result, err := u.client.Upload.Upload(ctx, file, uploader.UploadParams{
 		ResourceType: "image",
-		Folder:       "koskita/photos",
+		Folder:       "cariinkos/photos",
 	})
 	if err != nil {
 		return "", "", err

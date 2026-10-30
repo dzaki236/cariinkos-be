@@ -99,7 +99,7 @@ func (c *KosController) Update(ctx http.Context) http.Response {
 		"district":      "required|string|max:255",
 		"price_monthly": "required|numeric|min:1",
 		"type":          "required|in:mixed,man,woman",
-		"status":        "required|in:draft,published,archived",
+		"status":        "required|in:draft,published",
 	})
 	if err != nil {
 		return ctx.Response().Status(http.StatusInternalServerError).Json(http.Json{"message": "Validation failed"})
