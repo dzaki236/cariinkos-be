@@ -26,7 +26,8 @@ func (c *KosController) Index(ctx http.Context) http.Response {
 }
 
 func (c *KosController) Show(ctx http.Context) http.Response {
-	kos, err := c.service.GetByID(ctx.Request().Route("id"))
+	id := ctx.Request().Route("id")
+	kos, err := c.service.GetByID(id)
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -68,6 +69,7 @@ func (c *KosController) Store(ctx http.Context) http.Response {
 }
 
 func (c *KosController) Update(ctx http.Context) http.Response {
+	id := ctx.Request().Route("id")
 	var request dto.UpdateKosRequest
 	if err := ctx.Request().Bind(&request); err != nil {
 		return ctx.Response().Status(http.StatusNotFound).Json(http.Json{"message": "Invalid request body"})
@@ -89,7 +91,7 @@ func (c *KosController) Update(ctx http.Context) http.Response {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": "Validation failed", "errors": validator.Errors().All()})
 	}
 
-	kos, err := c.service.Update(ctx.Request().Route("id"), request)
+	kos, err := c.service.Update(id, request)
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -97,7 +99,8 @@ func (c *KosController) Update(ctx http.Context) http.Response {
 }
 
 func (c *KosController) Destroy(ctx http.Context) http.Response {
-	if err := c.service.Delete(ctx.Request().Route("id")); err != nil {
+	id := ctx.Request().Route("id")
+	if err := c.service.Delete(id); err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
 	return ctx.Response().Success().Json(http.Json{"message": "Kos deleted successfully"})

@@ -18,7 +18,8 @@ func NewKosPhotoController(service serviceContracts.KosPhotoService) *KosPhotoCo
 }
 
 func (c *KosPhotoController) Index(ctx http.Context) http.Response {
-	photos, err := c.service.GetAllByKosID(ctx.Request().Route("id"))
+	id := ctx.Request().Route("id")
+	photos, err := c.service.GetAllByKosID(id)
 	if err != nil {
 		return ctx.Response().Status(http.StatusInternalServerError).Json(http.Json{"message": "Failed to retrieve kos photos"})
 	}
@@ -26,6 +27,7 @@ func (c *KosPhotoController) Index(ctx http.Context) http.Response {
 }
 
 func (c *KosPhotoController) Store(ctx http.Context) http.Response {
+	id := ctx.Request().Route("id")
 	file, err := ctx.Request().File("photo")
 	if err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": "Photo file is required"})
@@ -33,7 +35,7 @@ func (c *KosPhotoController) Store(ctx http.Context) http.Response {
 	if err := validatePhotoFile(file); err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": err.Error()})
 	}
-	photo, err := c.service.Create(ctx.Request().Route("id"), dto.CreateKosPhotoRequest{File: file})
+	photo, err := c.service.Create(id, dto.CreateKosPhotoRequest{File: file})
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -41,6 +43,7 @@ func (c *KosPhotoController) Store(ctx http.Context) http.Response {
 }
 
 func (c *KosPhotoController) Update(ctx http.Context) http.Response {
+	id := ctx.Request().Route("id")
 	file, err := ctx.Request().File("photo")
 	if err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": "Photo file is required"})
@@ -48,7 +51,7 @@ func (c *KosPhotoController) Update(ctx http.Context) http.Response {
 	if err := validatePhotoFile(file); err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": err.Error()})
 	}
-	photo, err := c.service.Update(ctx.Request().Route("id"), ctx.Request().Route("photo_id"), dto.UpdateKosPhotoRequest{File: file})
+	photo, err := c.service.Update(id, ctx.Request().Route("photo_id"), dto.UpdateKosPhotoRequest{File: file})
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -56,7 +59,8 @@ func (c *KosPhotoController) Update(ctx http.Context) http.Response {
 }
 
 func (c *KosPhotoController) Destroy(ctx http.Context) http.Response {
-	if err := c.service.Delete(ctx.Request().Route("id"), ctx.Request().Route("photo_id")); err != nil {
+	id := ctx.Request().Route("id")
+	if err := c.service.Delete(id, ctx.Request().Route("photo_id")); err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
 	return ctx.Response().Success().Json(http.Json{"message": "Kos photo deleted successfully"})

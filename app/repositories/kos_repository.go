@@ -25,7 +25,11 @@ func (r *KosRepository) GetAllData() ([]models.Kos, error) {
 
 func (r *KosRepository) GetByID(id string) (models.Kos, error) {
 	var kos models.Kos
-	err := facades.Orm().Query().Where("id = ?", id).First(&kos)
+	err := facades.Orm().Query().Where("id = ?", id).With("User").
+		With("Facilities").
+		With("Contact").
+		With("Photos").
+		FirstOrFail(&kos)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return models.Kos{}, helpers.ErrDataNotFound
 	}
