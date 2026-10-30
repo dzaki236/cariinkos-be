@@ -5,6 +5,8 @@ import (
 	"cariinkos/app/facades"
 	"cariinkos/app/helpers"
 	serviceContracts "cariinkos/app/services/contracts"
+	"math"
+	"strconv"
 
 	"github.com/goravel/framework/contracts/http"
 )
@@ -18,11 +20,26 @@ func NewKosController(service serviceContracts.KosService) *KosController {
 }
 
 func (c *KosController) Index(ctx http.Context) http.Response {
-	kos, err := c.service.GetAllData()
+	page, err := strconv.Atoi(ctx.Request().Query("page", "1"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+	perPage, err := strconv.Atoi(ctx.Request().Query("per_page", "10"))
+	if err != nil || perPage < 1 {
+		perPage = 10
+	}
+	if perPage > 100 {
+		perPage = 100
+	}
+	kos, total, err := c.service.GetAllData(page, perPage)
 	if err != nil {
 		return ctx.Response().Status(http.StatusInternalServerError).Json(http.Json{"message": "Failed to retrieve kos"})
 	}
-	return ctx.Response().Success().Json(http.Json{"data": kos})
+	lastPage := int(math.Ceil(float64(total) / float64(perPage)))
+	return ctx.Response().Success().Json(http.Json{
+		"data": kos,
+		"meta": http.Json{"page": page, "per_page": perPage, "total": total, "last_page": lastPage},
+	})
 }
 
 func (c *KosController) Show(ctx http.Context) http.Response {

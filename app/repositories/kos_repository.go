@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"errors"
+	"strings"
 
 	"cariinkos/app/facades"
 	"cariinkos/app/helpers"
@@ -17,10 +18,27 @@ func NewKosRepository() *KosRepository {
 	return &KosRepository{}
 }
 
-func (r *KosRepository) GetAllData() ([]models.Kos, error) {
+func (r *KosRepository) GetAllData(page, perPage int) ([]models.Kos, int64, error) {
 	var dataKos []models.Kos
-	err := facades.Orm().Query().Find(&dataKos)
-	return dataKos, err
+	var total int64
+	err := facades.Orm().Query().Order("created_at desc").Paginate(page, perPage, &dataKos, &total)
+	if err != nil {
+		return nil, 0, err
+	}
+	for index := range dataKos {
+		var photo models.KosPhoto
+		err := facades.Orm().Query().Where("kos_id = ?", dataKos[index].ID).Order("created_at asc").Order("id asc").First(&photo)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			baseURL := strings.TrimRight(facades.Config().GetString("http.url"), "/") + "/public/images_not_found.jpg"
+			dataKos[index].CoverPhoto = &baseURL
+			continue
+		}
+		if err != nil {
+			return nil, 0, err
+		}
+		dataKos[index].CoverPhoto = &photo.ImageURL
+	}
+	return dataKos, total, nil
 }
 
 func (r *KosRepository) GetByID(id string) (models.Kos, error) {

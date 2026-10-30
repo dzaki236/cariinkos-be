@@ -33,6 +33,7 @@ type Kos struct {
 	Facilities []Facility  `gorm:"many2many:kos_facilities;foreignKey:ID;joinForeignKey:KosID;references:ID;joinReferences:FacilityID" json:"facilities,omitempty"`
 	Contact    *KosContact `gorm:"foreignKey:KosID;references:ID" json:"contact,omitempty"`
 	Photos     []KosPhoto  `gorm:"foreignKey:KosID;references:ID" json:"photos,omitempty"`
+	CoverPhoto *string     `gorm:"-" json:"cover_photo"`
 }
 
 func (Kos) TableName() string {

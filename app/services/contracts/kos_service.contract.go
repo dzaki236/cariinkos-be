@@ -6,7 +6,7 @@ import (
 )
 
 type KosService interface {
-	GetAllData() ([]models.Kos, error)
+	GetAllData(page, perPage int) ([]models.Kos, int64, error)
 	GetByID(id string) (models.Kos, error)
 	Create(userID string, request dto.CreateKosRequest) (models.Kos, error)
 	Update(id string, request dto.UpdateKosRequest) (models.Kos, error)

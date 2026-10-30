@@ -5,7 +5,7 @@ import (
 )
 
 type KosRepositoryContract interface {
-	GetAllData() ([]models.Kos, error)
+	GetAllData(page, perPage int) ([]models.Kos, int64, error)
 	GetByID(id string) (models.Kos, error)
 	Create(kos *models.Kos) error
 	Update(kos *models.Kos) error

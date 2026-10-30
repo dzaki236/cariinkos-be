@@ -17,8 +17,8 @@ func NewKosService(repo repositoryContracts.KosRepositoryContract) *KosService {
 	return &KosService{repo: repo}
 }
 
-func (s *KosService) GetAllData() ([]models.Kos, error) {
-	return s.repo.GetAllData()
+func (s *KosService) GetAllData(page, perPage int) ([]models.Kos, int64, error) {
+	return s.repo.GetAllData(page, perPage)
 }
 
 func (s *KosService) GetByID(id string) (models.Kos, error) {
