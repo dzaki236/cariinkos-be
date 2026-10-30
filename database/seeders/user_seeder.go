@@ -21,7 +21,7 @@ func (s *UserSeeder) Run() error {
 	if err != nil {
 		return err
 	}
-
+	password_ori, _ := facades.Hash().Make("password")
 	users := []models.User{
 		{ID: uuid.NewString(), Name: "Budi Santoso", Email: "budi@example.com", Password: password, Role: "owner"},
 		{ID: uuid.NewString(), Name: "Siti Aminah", Email: "siti@example.com", Password: password, Role: "owner"},
@@ -29,6 +29,7 @@ func (s *UserSeeder) Run() error {
 		{ID: uuid.NewString(), Name: "Dewi Lestari", Email: "dewi@example.com", Password: password, Role: "owner"},
 		{ID: uuid.NewString(), Name: "Rizky Pratama", Email: "rizky@example.com", Password: password, Role: "owner"},
 		{ID: uuid.NewString(), Name: "Dzaki Ahnaf Z", Email: "dzaki236@example.com", Password: password, Role: "owner"},
+		{ID: uuid.NewString(), Name: "Pemilik Kos", Email: "pemilik@example.com", Password: password_ori, Role: "owner"},
 	}
 
 	for _, user := range users {
