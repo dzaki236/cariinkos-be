@@ -1,9 +1,10 @@
 package config
 
 import (
+	"cariinkos/app/facades"
+
 	"github.com/goravel/framework/contracts/database/driver"
 	postgresfacades "github.com/goravel/postgres/facades"
-	"cariinkos/app/facades"
 )
 
 func init() {
@@ -19,7 +20,7 @@ func init() {
 				"database": config.Env("DB_DATABASE"),
 				"username": config.Env("DB_USERNAME"),
 				"password": config.Env("DB_PASSWORD"),
-				"sslmode":  "disable",
+				"sslmode":  config.Env("DB_SSLMODE"),
 				"singular": false,
 				"prefix":   "",
 				"schema":   config.Env("DB_SCHEMA", "public"),
