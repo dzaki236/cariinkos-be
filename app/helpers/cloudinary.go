@@ -3,15 +3,18 @@ package helpers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
+
+	"cariinkos/app/facades"
 
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
 type PhotoUploader interface {
-	Upload(filePath string) (string, string, error)
-	Delete(publicID string) error
+	Upload(ctx context.Context, filePath string) (string, string, error)
+	Delete(ctx context.Context, publicID string) error
 }
 
 type CloudinaryPhotoUploader struct {
@@ -20,7 +23,7 @@ type CloudinaryPhotoUploader struct {
 }
 
 func NewCloudinaryPhotoUploader() *CloudinaryPhotoUploader {
-	cloudinaryURL := os.Getenv("CLOUDINARY_URL")
+	cloudinaryURL := facades.Config().GetString("cloudinary.url")
 	if cloudinaryURL == "" {
 		return &CloudinaryPhotoUploader{err: errors.New("CLOUDINARY_URL is required")}
 	}
@@ -31,21 +34,42 @@ func NewCloudinaryPhotoUploader() *CloudinaryPhotoUploader {
 	return &CloudinaryPhotoUploader{client: client}
 }
 
-func (u *CloudinaryPhotoUploader) Upload(filePath string) (string, string, error) {
+func (u *CloudinaryPhotoUploader) Upload(ctx context.Context, filePath string) (string, string, error) {
 	if u.err != nil {
 		return "", "", u.err
 	}
-	result, err := u.client.Upload.Upload(context.Background(), filePath, uploader.UploadParams{ResourceType: "image"})
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", "", fmt.Errorf("open file for cloudinary upload: %w", err)
+	}
+	defer file.Close()
+	result, err := u.client.Upload.Upload(ctx, file, uploader.UploadParams{
+		ResourceType: "image",
+		Folder:       "koskita/photos",
+	})
 	if err != nil {
 		return "", "", err
 	}
-	return result.SecureURL, result.PublicID, nil
+	if result == nil {
+		return "", "", errors.New("cloudinary upload returned an empty response")
+	}
+	if result.Error.Message != "" {
+		return "", "", fmt.Errorf("cloudinary rejected upload: %s", result.Error.Message)
+	}
+	imageURL := result.SecureURL
+	if imageURL == "" {
+		imageURL = result.URL
+	}
+	if imageURL == "" || result.PublicID == "" {
+		return "", "", errors.New("cloudinary upload response is missing secure_url/url or public_id")
+	}
+	return imageURL, result.PublicID, nil
 }
 
-func (u *CloudinaryPhotoUploader) Delete(publicID string) error {
+func (u *CloudinaryPhotoUploader) Delete(ctx context.Context, publicID string) error {
 	if u.err != nil {
 		return u.err
 	}
-	_, err := u.client.Upload.Destroy(context.Background(), uploader.DestroyParams{PublicID: publicID, ResourceType: "image"})
+	_, err := u.client.Upload.Destroy(ctx, uploader.DestroyParams{PublicID: publicID, ResourceType: "image"})
 	return err
 }

@@ -31,12 +31,22 @@ func (r *KosPhotoRepository) GetByID(kosID, photoID string) (models.KosPhoto, er
 }
 
 func (r *KosPhotoRepository) Create(photo *models.KosPhoto) error {
-	return facades.Orm().Query().Create(photo)
+	return facades.Orm().Query().Create(&photo)
 }
 
 func (r *KosPhotoRepository) Update(photo *models.KosPhoto) error {
-	_, err := facades.Orm().Query().Where("kos_id = ? AND id = ?", photo.KosID, photo.ID).Update(photo)
-	return err
+	var tablename = photo.TableName() // get table name
+	result, err := facades.Orm().Query().Table(tablename).Where("kos_id = ? AND id = ?", photo.KosID, photo.ID).Update(map[string]any{
+		"image_url": photo.ImageURL,
+		"public_id": photo.PublicID,
+	})
+	if err != nil {
+		return err
+	}
+	if result.RowsAffected == 0 {
+		return helpers.ErrDataNotFound
+	}
+	return nil
 }
 
 func (r *KosPhotoRepository) Delete(kosID, photoID string) error {
