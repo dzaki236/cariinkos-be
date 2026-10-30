@@ -4,6 +4,7 @@ import (
 	"cariinkos/app/dto"
 	"cariinkos/app/facades"
 	"cariinkos/app/helpers"
+	"cariinkos/app/models"
 	serviceContracts "cariinkos/app/services/contracts"
 	"math"
 	"strconv"
@@ -20,6 +21,14 @@ func NewKosController(service serviceContracts.KosService) *KosController {
 }
 
 func (c *KosController) Index(ctx http.Context) http.Response {
+	return c.getAllData(ctx, false)
+}
+
+func (c *KosController) PublicIndex(ctx http.Context) http.Response {
+	return c.getAllData(ctx, true)
+}
+
+func (c *KosController) getAllData(ctx http.Context, publishedOnly bool) http.Response {
 	page, err := strconv.Atoi(ctx.Request().Query("page", "1"))
 	if err != nil || page < 1 {
 		page = 1
@@ -31,7 +40,13 @@ func (c *KosController) Index(ctx http.Context) http.Response {
 	if perPage > 100 {
 		perPage = 100
 	}
-	kos, total, err := c.service.GetAllData(page, perPage)
+	var kos []models.Kos
+	var total int64
+	if publishedOnly {
+		kos, total, err = c.service.GetPublishedData(page, perPage)
+	} else {
+		kos, total, err = c.service.GetAllData(page, perPage)
+	}
 	if err != nil {
 		return ctx.Response().Status(http.StatusInternalServerError).Json(http.Json{"message": "Failed to retrieve kos"})
 	}
@@ -43,8 +58,22 @@ func (c *KosController) Index(ctx http.Context) http.Response {
 }
 
 func (c *KosController) Show(ctx http.Context) http.Response {
+	return c.show(ctx, false)
+}
+
+func (c *KosController) PublicShow(ctx http.Context) http.Response {
+	return c.show(ctx, true)
+}
+
+func (c *KosController) show(ctx http.Context, publishedOnly bool) http.Response {
 	id := ctx.Request().Route("id")
-	kos, err := c.service.GetByID(id)
+	var kos models.Kos
+	var err error
+	if publishedOnly {
+		kos, err = c.service.GetPublishedByID(id)
+	} else {
+		kos, err = c.service.GetByID(id)
+	}
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}

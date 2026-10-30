@@ -19,9 +19,21 @@ func NewKosRepository() *KosRepository {
 }
 
 func (r *KosRepository) GetAllData(page, perPage int) ([]models.Kos, int64, error) {
+	return r.getData(page, perPage, false)
+}
+
+func (r *KosRepository) GetPublishedData(page, perPage int) ([]models.Kos, int64, error) {
+	return r.getData(page, perPage, true)
+}
+
+func (r *KosRepository) getData(page, perPage int, publishedOnly bool) ([]models.Kos, int64, error) {
 	var dataKos []models.Kos
 	var total int64
-	err := facades.Orm().Query().With("User").Order("created_at desc").Paginate(page, perPage, &dataKos, &total)
+	query := facades.Orm().Query().With("User")
+	if publishedOnly {
+		query = query.Where("status = ?", "published")
+	}
+	err := query.Order("created_at desc").Paginate(page, perPage, &dataKos, &total)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -42,8 +54,20 @@ func (r *KosRepository) GetAllData(page, perPage int) ([]models.Kos, int64, erro
 }
 
 func (r *KosRepository) GetByID(id string) (models.Kos, error) {
+	return r.getByID(id, false)
+}
+
+func (r *KosRepository) GetPublishedByID(id string) (models.Kos, error) {
+	return r.getByID(id, true)
+}
+
+func (r *KosRepository) getByID(id string, publishedOnly bool) (models.Kos, error) {
 	var kos models.Kos
-	err := facades.Orm().Query().Where("id = ?", id).With("User").
+	query := facades.Orm().Query().Where("id = ?", id)
+	if publishedOnly {
+		query = query.Where("status = ?", "published")
+	}
+	err := query.With("User").
 		With("Facilities").
 		With("Contact").
 		With("Photos").

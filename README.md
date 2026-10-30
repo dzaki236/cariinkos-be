@@ -279,6 +279,8 @@ Semua method dan path di bawah relatif terhadap base URL.
 | Auth | POST | `/login` | Login dan memperoleh token | Tidak |
 | Auth | POST | `/logout` | Logout | Ya |
 | Dokumentasi | GET | `/docs` | Halaman dokumentasi API | Tidak |
+| Kos publik | GET | `/public/kos` | Daftar kos tanpa autentikasi | Tidak |
+| Kos publik | GET | `/public/kos/{id}` | Detail kos tanpa autentikasi | Tidak |
 | Kos | GET | `/kos` | Daftar kos | Ya |
 | Kos | GET | `/kos/{id}` | Detail kos | Ya |
 | Kos | POST | `/kos` | Buat kos | Ya |
@@ -339,6 +341,15 @@ Kredensial salah mengembalikan `401`.
 Memerlukan Bearer token. Respons sukses: `{"message":"Logout successful"}`.
 
 ## Kos
+
+### Endpoint publik
+
+Dua route publik berikut tidak memerlukan Bearer token. Route ini menggunakan handler daftar dan detail kos yang sama dengan endpoint terautentikasi, sehingga saat ini tidak membatasi hasil berdasarkan status publikasi:
+
+- `GET /public/kos` menerima query `page` dan `per_page` dengan default, batas, dan metadata pagination yang sama seperti `GET /kos`.
+- `GET /public/kos/{id}` mengembalikan detail kos beserta relasi yang dimuat oleh endpoint, sama seperti `GET /kos/{id}`. Resource yang tidak ditemukan mengembalikan `404`.
+
+### Endpoint terautentikasi
 
 ### Field kos
 

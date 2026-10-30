@@ -21,8 +21,16 @@ func (s *KosService) GetAllData(page, perPage int) ([]models.Kos, int64, error) 
 	return s.repo.GetAllData(page, perPage)
 }
 
+func (s *KosService) GetPublishedData(page, perPage int) ([]models.Kos, int64, error) {
+	return s.repo.GetPublishedData(page, perPage)
+}
+
 func (s *KosService) GetByID(id string) (models.Kos, error) {
 	return s.repo.GetByID(id)
+}
+
+func (s *KosService) GetPublishedByID(id string) (models.Kos, error) {
+	return s.repo.GetPublishedByID(id)
 }
 
 func (s *KosService) Create(userID string, request dto.CreateKosRequest) (models.Kos, error) {
