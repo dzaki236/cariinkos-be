@@ -29,10 +29,10 @@ type Kos struct {
 	CreatedAt         time.Time `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt         time.Time `gorm:"column:updated_at" json:"updated_at"`
 
-	User       User         `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
-	Facilities []Facility   `gorm:"many2many:kos_facilities;foreignKey:ID;joinForeignKey:KosID;references:ID;joinReferences:FacilityID" json:"facilities,omitempty"`
-	Contacts   []KosContact `gorm:"foreignKey:KosID;references:ID" json:"contacts,omitempty"`
-	Photos     []KosPhoto   `gorm:"foreignKey:KosID;references:ID" json:"photos,omitempty"`
+	User       User        `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
+	Facilities []Facility  `gorm:"many2many:kos_facilities;foreignKey:ID;joinForeignKey:KosID;references:ID;joinReferences:FacilityID" json:"facilities,omitempty"`
+	Contact    *KosContact `gorm:"foreignKey:KosID;references:ID" json:"contact,omitempty"`
+	Photos     []KosPhoto  `gorm:"foreignKey:KosID;references:ID" json:"photos,omitempty"`
 }
 
 func (Kos) TableName() string {

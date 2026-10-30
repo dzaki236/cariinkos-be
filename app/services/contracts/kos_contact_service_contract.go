@@ -6,8 +6,8 @@ import (
 )
 
 type KosContactService interface {
-	GetAllByKosID(kosID string) ([]models.KosContact, error)
+	GetByKosID(kosID string) (models.KosContact, error)
 	Create(kosID string, request dto.CreateKosContactRequest) (models.KosContact, error)
-	Update(kosID, contactID string, request dto.UpdateKosContactRequest) (models.KosContact, error)
-	Delete(kosID, contactID string) error
+	Update(kosID string, request dto.UpdateKosContactRequest) (models.KosContact, error)
+	Delete(kosID string) error
 }

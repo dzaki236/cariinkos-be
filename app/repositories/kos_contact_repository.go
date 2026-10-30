@@ -15,15 +15,9 @@ type KosContactRepository struct{}
 
 func NewKosContactRepository() *KosContactRepository { return &KosContactRepository{} }
 
-func (r *KosContactRepository) GetAllByKosID(kosID string) ([]models.KosContact, error) {
-	var contacts []models.KosContact
-	err := facades.Orm().Query().Where("kos_id = ?", kosID).Find(&contacts)
-	return contacts, err
-}
-
-func (r *KosContactRepository) GetByID(kosID, contactID string) (models.KosContact, error) {
+func (r *KosContactRepository) GetByKosID(kosID string) (models.KosContact, error) {
 	var contact models.KosContact
-	err := facades.Orm().Query().Where("kos_id = ? AND id = ?", kosID, contactID).First(&contact)
+	err := facades.Orm().Query().Where("kos_id = ?", kosID).First(&contact)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return models.KosContact{}, helpers.ErrDataNotFound
 	}
@@ -35,13 +29,13 @@ func (r *KosContactRepository) Create(contact *models.KosContact) error {
 }
 
 func (r *KosContactRepository) Update(contact *models.KosContact) error {
-	_, err := facades.Orm().Query().Where("kos_id = ? AND id = ?", contact.KosID, contact.ID).Update(contact)
+	_, err := facades.Orm().Query().Where("kos_id = ?", contact.KosID).Update(contact)
 	return err
 }
 
-func (r *KosContactRepository) Delete(kosID, contactID string) error {
+func (r *KosContactRepository) Delete(kosID string) error {
 	var contact models.KosContact
-	result, err := facades.Orm().Query().Where("kos_id = ? AND id = ?", kosID, contactID).Delete(&contact)
+	result, err := facades.Orm().Query().Where("kos_id = ?", kosID).Delete(&contact)
 	if err != nil {
 		return err
 	}

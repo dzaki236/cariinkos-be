@@ -5,8 +5,6 @@ import (
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 	serviceContracts "cariinkos/app/services/contracts"
-
-	"github.com/google/uuid"
 )
 
 type KosContactService struct {
@@ -17,23 +15,24 @@ func NewKosContactService(repo repositoryContracts.KosContactRepositoryContract)
 	return &KosContactService{repo: repo}
 }
 
-func (s *KosContactService) GetAllByKosID(kosID string) ([]models.KosContact, error) {
-	return s.repo.GetAllByKosID(kosID)
+func (s *KosContactService) GetByKosID(kosID string) (models.KosContact, error) {
+	return s.repo.GetByKosID(kosID)
 }
 
 func (s *KosContactService) Create(kosID string, request dto.CreateKosContactRequest) (models.KosContact, error) {
-	contact := models.KosContact{ID: uuid.NewString(), KosID: kosID, Phone: request.Phone, Whatsapp: request.Whatsapp}
+	contact := models.KosContact{KosID: kosID, ContactName: request.ContactName, Phone: request.Phone, Whatsapp: request.Whatsapp}
 	if err := s.repo.Create(&contact); err != nil {
 		return models.KosContact{}, err
 	}
 	return contact, nil
 }
 
-func (s *KosContactService) Update(kosID, contactID string, request dto.UpdateKosContactRequest) (models.KosContact, error) {
-	contact, err := s.repo.GetByID(kosID, contactID)
+func (s *KosContactService) Update(kosID string, request dto.UpdateKosContactRequest) (models.KosContact, error) {
+	contact, err := s.repo.GetByKosID(kosID)
 	if err != nil {
 		return models.KosContact{}, err
 	}
+	contact.ContactName = request.ContactName
 	contact.Phone = request.Phone
 	contact.Whatsapp = request.Whatsapp
 	if err := s.repo.Update(&contact); err != nil {
@@ -42,8 +41,8 @@ func (s *KosContactService) Update(kosID, contactID string, request dto.UpdateKo
 	return contact, nil
 }
 
-func (s *KosContactService) Delete(kosID, contactID string) error {
-	return s.repo.Delete(kosID, contactID)
+func (s *KosContactService) Delete(kosID string) error {
+	return s.repo.Delete(kosID)
 }
 
 var _ serviceContracts.KosContactService = (*KosContactService)(nil)

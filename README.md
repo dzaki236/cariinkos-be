@@ -83,10 +83,10 @@ Semua method dan path di bawah relatif terhadap base URL.
 | Foto kos | POST | `/kos/{id}/photos` | Unggah foto | Ya |
 | Foto kos | PUT | `/kos/{id}/photos/{photo_id}` | Ganti foto | Ya |
 | Foto kos | DELETE | `/kos/{id}/photos/{photo_id}` | Hapus foto | Ya |
-| Kontak kos | GET | `/kos/{id}/contacts` | Daftar kontak kos | Ya |
-| Kontak kos | POST | `/kos/{id}/contacts` | Tambah kontak | Ya |
-| Kontak kos | PUT | `/kos/{id}/contacts/{contact_id}` | Perbarui kontak | Ya |
-| Kontak kos | DELETE | `/kos/{id}/contacts/{contact_id}` | Hapus kontak | Ya |
+| Kontak kos | GET | `/kos/{id}/contacts` | Lihat kontak kos | Ya |
+| Kontak kos | POST | `/kos/{id}/contacts` | Simpan kontak kos | Ya |
+| Kontak kos | PUT | `/kos/{id}/contacts` | Perbarui kontak kos | Ya |
+| Kontak kos | DELETE | `/kos/{id}/contacts` | Hapus kontak kos | Ya |
 
 ## Auth
 
@@ -198,16 +198,17 @@ Sukses mengembalikan `{"message":"Facility attached to kos successfully"}`. `DEL
 
 ## Kontak Kos
 
-### `POST /kos/{id}/contacts` dan `PUT /kos/{id}/contacts/{contact_id}`
+### `POST /kos/{id}/contacts` dan `PUT /kos/{id}/contacts`
 
 ```json
 {
+  "contact_name": "Penjaga Kos",
   "phone": "+62221234567",
   "whatsapp": "+6281234567890"
 }
 ```
 
-`phone` wajib berupa string maksimum 50 karakter. `whatsapp` opsional/null maksimum 50 karakter. Create mengembalikan `201`; list, create, dan update mengembalikan resource dalam `data`; delete mengembalikan `message`.
+Satu kos hanya memiliki satu kontak, yang ditentukan oleh `kos_id` dan tidak memiliki ID tersendiri. `contact_name` dan `phone` wajib berupa string; `whatsapp` opsional/null maksimum 50 karakter. Create mengembalikan `201`; get, create, dan update mengembalikan satu resource dalam `data`; delete mengembalikan `message`.
 
 ## Foto Kos
 

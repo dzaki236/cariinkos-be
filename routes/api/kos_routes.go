@@ -29,6 +29,6 @@ func KosRoutes(router route.Router) {
 
 	router.Get("/kos/{id}/contacts", contactController.Index)
 	router.Post("/kos/{id}/contacts", contactController.Store)
-	router.Put("/kos/{id}/contacts/{contact_id}", contactController.Update)
-	router.Delete("/kos/{id}/contacts/{contact_id}", contactController.Destroy)
+	router.Put("/kos/{id}/contacts", contactController.Update)
+	router.Delete("/kos/{id}/contacts", contactController.Destroy)
 }
