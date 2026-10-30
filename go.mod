@@ -9,7 +9,6 @@ require (
 	github.com/goravel/gin v1.18.0
 	github.com/goravel/openai v1.18.0
 	github.com/goravel/postgres v1.18.0
-	github.com/stretchr/testify v1.12.1
 	gorm.io/gorm v1.31.2
 )
 
@@ -39,7 +38,6 @@ require (
 	github.com/clipperhouse/displaywidth v0.11.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/cloudwego/base64x v0.1.7 // indirect
-	github.com/coder/websocket v1.8.15 // indirect
 	github.com/containerd/console v1.0.5 // indirect
 	github.com/creasty/defaults v1.11.0 // indirect
 	github.com/dave/dst v0.28.0 // indirect
@@ -105,6 +103,7 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/spf13/viper v1.21.0 // indirect
+	github.com/stretchr/testify v1.12.1 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tidwall/gjson v1.20.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
