@@ -13,8 +13,8 @@ func KosRoutes(router route.Router) {
 	photoController := providers.NewKosPhotoProvider()
 	contactController := providers.NewKosContactProvider()
 
-	router.Get("/public/kos", controller.Index)
-	router.Get("/public/kos/{id}", controller.Show)
+	router.Get("/public/kos", controller.PublicIndex)
+	router.Get("/public/kos/{id}", controller.PublicShow)
 	router.Middleware(middleware.NewHandleAuth()).Group(func(router route.Router) {
 		router.Get("/kos", controller.Index)
 		router.Get("/kos/{id}", controller.Show)

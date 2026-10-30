@@ -30,7 +30,7 @@ func (r *KosRepository) getData(page, perPage int, publishedOnly bool) ([]models
 	var dataKos []models.Kos
 	var total int64
 	query := facades.Orm().Query().With("User")
-	if publishedOnly {
+	if publishedOnly == true {
 		query = query.Where("status = ?", "published")
 	}
 	err := query.Order("created_at desc").Paginate(page, perPage, &dataKos, &total)
