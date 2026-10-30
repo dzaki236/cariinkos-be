@@ -18,8 +18,8 @@ func Api() {
 			return ctx.Response().View().Make("apidocs.tmpl", map[string]any{})
 		})
 		apiRoutes.AuthRoutes(router)
+		apiRoutes.KosRoutes(router)
 		router.Middleware(middleware.NewHandleAuth()).Group(func(router route.Router) {
-			apiRoutes.KosRoutes(router)
 			apiRoutes.FacilityRoutes(router)
 		})
 	})
