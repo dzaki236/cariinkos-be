@@ -8,7 +8,7 @@ import (
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 
-	goravelErrors "github.com/goravel/framework/errors"
+	"gorm.io/gorm"
 )
 
 type FacilityRepository struct{}
@@ -26,7 +26,7 @@ func (r *FacilityRepository) GetAllData() ([]models.Facility, error) {
 func (r *FacilityRepository) GetByID(id string) (models.Facility, error) {
 	var facility models.Facility
 	err := facades.Orm().Query().Where("id = ?", id).First(&facility)
-	if errors.Is(err, goravelErrors.OrmRecordNotFound) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return models.Facility{}, helpers.ErrDataNotFound
 	}
 	return facility, err

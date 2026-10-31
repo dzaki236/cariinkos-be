@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"strings"
 
 	"cariinkos/app/dto"
 	"cariinkos/app/facades"
@@ -45,14 +44,6 @@ func (s *UserAuthService) Login(ctx http.Context, request dto.LoginRequest) (mod
 }
 
 func (s *UserAuthService) Register(request dto.RegisterRequest) (models.User, error) {
-	_, err := s.repository.FindByEmail(request.Email)
-	if err == nil {
-		return models.User{}, helpers.ErrEmailAlreadyRegistered
-	}
-	if !errors.Is(err, helpers.ErrDataNotFound) {
-		return models.User{}, err
-	}
-
 	password, err := facades.Hash().Make(request.Password)
 	if err != nil {
 		return models.User{}, err
@@ -66,10 +57,6 @@ func (s *UserAuthService) Register(request dto.RegisterRequest) (models.User, er
 		Role:     "user",
 	}
 	if err := s.repository.Create(&user); err != nil {
-		databaseError := strings.ToLower(err.Error())
-		if strings.Contains(databaseError, "users_email_unique") || strings.Contains(databaseError, "users_email_key") {
-			return models.User{}, helpers.ErrEmailAlreadyRegistered
-		}
 		return models.User{}, err
 	}
 	return user, nil

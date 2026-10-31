@@ -9,7 +9,7 @@ import (
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 
-	goravelErrors "github.com/goravel/framework/errors"
+	"gorm.io/gorm"
 )
 
 type KosRepository struct{}
@@ -43,7 +43,7 @@ func (r *KosRepository) getData(page, perPage int, publishedOnly bool) ([]models
 	for index := range dataKos {
 		var photo models.KosPhoto
 		err := facades.Orm().Query().Where("kos_id = ?", dataKos[index].ID).Order("created_at asc").Order("id asc").First(&photo)
-		if errors.Is(err, goravelErrors.OrmRecordNotFound) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			baseURL := strings.TrimRight(facades.Config().GetString("http.url"), "/") + "/public/images_not_found.jpg"
 			dataKos[index].CoverPhoto = &baseURL
 			continue
@@ -75,7 +75,7 @@ func (r *KosRepository) getByID(id string, publishedOnly bool) (models.Kos, erro
 		With("Contact").
 		With("Photos").
 		First(&kos)
-	if errors.Is(err, goravelErrors.OrmRecordNotFound) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return models.Kos{}, helpers.ErrDataNotFound
 	}
 	if err != nil {
@@ -93,12 +93,16 @@ func (r *KosRepository) getAvgRatingsAndFavoriteCount(kos *models.Kos) error {
 		AverageRating *float64 `gorm:"column:average_rating"`
 		FavoriteCount int64    `gorm:"column:favorite_count"`
 	}
-	err := facades.Orm().Query().
-		Table(tablename).Select("kos.id, "+ratingAndFavoriteAggregates).
-		Where("kos.id = ?", kos.ID).
-		First(&aggregate)
+	err := facades.Orm().Query().Raw(
+		"SELECT (SELECT AVG(rating) FROM kos_reviews WHERE kos_reviews.kos_id = kos.id) AS average_rating, (SELECT COUNT(*) FROM kos_favorites WHERE kos_favorites.kos_id = kos.id) AS favorite_count FROM "+tablename+" AS kos WHERE kos.id = ?",
+		kos.ID,
+	).Scan(&aggregate)
 	if err != nil {
 		return err
+	}
+	if aggregate.AverageRating == nil {
+		zero := float64(0)
+		aggregate.AverageRating = &zero
 	}
 	kos.Rattings = aggregate.AverageRating
 	kos.FavoriteCount = aggregate.FavoriteCount
@@ -118,10 +122,10 @@ func (r *KosRepository) getAvgRatingsAndFavoriteCountForKos(kosList []models.Kos
 		FavoriteCount int64    `gorm:"column:favorite_count"`
 	}
 	var aggregates []aggregate
-	if err := facades.Orm().Query().Table(tablename).
-		Select("kos.id AS kos_id, "+ratingAndFavoriteAggregates).
-		Where("kos.id IN ?", kosIDs(kosList)).
-		Find(&aggregates); err != nil {
+	if err := facades.Orm().Query().Raw(
+		"SELECT kos.id AS kos_id, "+ratingAndFavoriteAggregates+" FROM "+tablename+" AS kos WHERE kos.id IN ?",
+		kosIDs(kosList),
+	).Scan(&aggregates); err != nil {
 		return err
 	}
 	statisticsByKosID := make(map[string]aggregate, len(aggregates))
@@ -130,8 +134,15 @@ func (r *KosRepository) getAvgRatingsAndFavoriteCountForKos(kosList []models.Kos
 	}
 	for index := range kosList {
 		if item, exists := statisticsByKosID[kosList[index].ID]; exists {
+			if item.AverageRating == nil {
+				zero := float64(0)
+				item.AverageRating = &zero
+			}
 			kosList[index].Rattings = item.AverageRating
 			kosList[index].FavoriteCount = item.FavoriteCount
+		} else {
+			zero := float64(0)
+			kosList[index].Rattings = &zero
 		}
 	}
 	return nil
@@ -150,13 +161,30 @@ func (r *KosRepository) Create(kos *models.Kos) error {
 }
 
 func (r *KosRepository) Update(kos *models.Kos) error {
-	_, err := facades.Orm().Query().Where("id = ?", kos.ID).Update(&kos)
+	_, err := facades.Orm().Query().Table(kos.TableName()).Where("id = ?", kos.ID).Update(map[string]any{
+		"name":                kos.Name,
+		"description":         kos.Description,
+		"address":             kos.Address,
+		"province":            kos.Province,
+		"city":                kos.City,
+		"district":            kos.District,
+		"subdistrict":         kos.Subdistrict,
+		"gmaps_link":          kos.GmapsLink,
+		"price_monthly":       kos.PriceMonthly,
+		"type":                kos.Type,
+		"status":              kos.Status,
+		"room_size":           kos.RoomSize,
+		"total_rooms":         kos.TotalRooms,
+		"available_rooms":     kos.AvailableRooms,
+		"minimum_rent_months": kos.MinimumRentMonths,
+		"rules":               kos.Rules,
+	})
 	return err
 }
 
 func (r *KosRepository) Delete(id string) error {
 	var Kos models.Kos
-	result, err := facades.Orm().Query().Where("id = ?", id).Delete(&Kos)
+	result, err := facades.Orm().Query().Model(&Kos).Where("id = ?", id).Delete(&Kos)
 	if err != nil {
 		return err
 	}

@@ -40,8 +40,9 @@ func KosRoutes(router route.Router) {
 			router.Put("/kos/{id}/contacts", contactController.Update)
 			router.Delete("/kos/{id}/contacts", contactController.Destroy)
 		})
-		
+
 		router.Middleware(middleware.NewRoleAuth("user")).Group(func(router route.Router) {
+			// router.Get("/kos/{id}/review/{review_id}", reviewController.)
 			router.Post("/kos/{id}/reviews", reviewController.Store)
 			router.Put("/kos/{id}/reviews", reviewController.Update)
 			router.Delete("/kos/{id}/reviews", reviewController.Destroy)

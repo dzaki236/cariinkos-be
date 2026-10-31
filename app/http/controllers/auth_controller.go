@@ -49,7 +49,7 @@ func (c *AuthController) Register(ctx http.Context) http.Response {
 
 	validator, err := ctx.Request().Validate(map[string]any{
 		"name":     "required|string|max:255",
-		"email":    "required|email|max:255",
+		"email":    "required|email|max:255|unique:users,email",
 		"password": "required|string|min:8",
 	})
 	if err != nil {

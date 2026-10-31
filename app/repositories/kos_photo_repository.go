@@ -8,7 +8,7 @@ import (
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 
-	goravelErrors "github.com/goravel/framework/errors"
+	"gorm.io/gorm"
 )
 
 type KosPhotoRepository struct{}
@@ -24,7 +24,7 @@ func (r *KosPhotoRepository) GetAllByKosID(kosID string) ([]models.KosPhoto, err
 func (r *KosPhotoRepository) GetByID(kosID, photoID string) (models.KosPhoto, error) {
 	var photo models.KosPhoto
 	err := facades.Orm().Query().Where("kos_id = ? AND id = ?", kosID, photoID).First(&photo)
-	if errors.Is(err, goravelErrors.OrmRecordNotFound) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return models.KosPhoto{}, helpers.ErrDataNotFound
 	}
 	return photo, err
