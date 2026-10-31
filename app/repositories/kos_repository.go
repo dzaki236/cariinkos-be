@@ -9,7 +9,7 @@ import (
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 
-	"gorm.io/gorm"
+	goravelErrors "github.com/goravel/framework/errors"
 )
 
 type KosRepository struct{}
@@ -43,7 +43,7 @@ func (r *KosRepository) getData(page, perPage int, publishedOnly bool) ([]models
 	for index := range dataKos {
 		var photo models.KosPhoto
 		err := facades.Orm().Query().Where("kos_id = ?", dataKos[index].ID).Order("created_at asc").Order("id asc").First(&photo)
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		if errors.Is(err, goravelErrors.OrmRecordNotFound) {
 			baseURL := strings.TrimRight(facades.Config().GetString("http.url"), "/") + "/public/images_not_found.jpg"
 			dataKos[index].CoverPhoto = &baseURL
 			continue
@@ -74,8 +74,8 @@ func (r *KosRepository) getByID(id string, publishedOnly bool) (models.Kos, erro
 		With("Facilities").
 		With("Contact").
 		With("Photos").
-		FirstOrFail(&kos)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+		First(&kos)
+	if errors.Is(err, goravelErrors.OrmRecordNotFound) {
 		return models.Kos{}, helpers.ErrDataNotFound
 	}
 	if err != nil {

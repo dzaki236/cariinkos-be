@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"errors"
-
 	"cariinkos/app/dto"
 	"cariinkos/app/helpers"
 	serviceContracts "cariinkos/app/services/contracts"
@@ -37,9 +35,6 @@ func (c *AuthController) Login(ctx http.Context) http.Response {
 
 	user, token, err := c.service.Login(ctx, request)
 	if err != nil {
-		if errors.Is(err, helpers.ErrInvalidCredentials) {
-			return ctx.Response().Status(http.StatusUnauthorized).Json(http.Json{"message": "Invalid email or password"})
-		}
 		return helpers.ErrorResponse(ctx, err)
 	}
 
@@ -65,9 +60,6 @@ func (c *AuthController) Register(ctx http.Context) http.Response {
 	}
 
 	user, err := c.service.Register(request)
-	if errors.Is(err, helpers.ErrDataAlreadyExists) {
-		return ctx.Response().Status(http.StatusConflict).Json(http.Json{"message": err.Error()})
-	}
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}

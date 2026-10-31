@@ -6,7 +6,8 @@ import (
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 	"errors"
-	"gorm.io/gorm"
+
+	goravelErrors "github.com/goravel/framework/errors"
 )
 
 type KosFavoriteRepository struct{}
@@ -22,7 +23,7 @@ func (r *KosFavoriteRepository) GetByUser(userID string) ([]models.KosFavorite, 
 func (r *KosFavoriteRepository) Find(userID, kosID string) (models.KosFavorite, error) {
 	var favorite models.KosFavorite
 	err := facades.Orm().Query().Where("user_id = ? AND kos_id = ?", userID, kosID).With("Kos").First(&favorite)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	if errors.Is(err, goravelErrors.OrmRecordNotFound) {
 		return models.KosFavorite{}, helpers.ErrDataNotFound
 	}
 	return favorite, err

@@ -8,7 +8,7 @@ import (
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 
-	"gorm.io/gorm"
+	goravelErrors "github.com/goravel/framework/errors"
 )
 
 type KosContactRepository struct{}
@@ -18,7 +18,7 @@ func NewKosContactRepository() *KosContactRepository { return &KosContactReposit
 func (r *KosContactRepository) GetByKosID(kosID string) (models.KosContact, error) {
 	var contact models.KosContact
 	err := facades.Orm().Query().Where("kos_id = ?", kosID).First(&contact)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	if errors.Is(err, goravelErrors.OrmRecordNotFound) {
 		return models.KosContact{}, helpers.ErrDataNotFound
 	}
 	return contact, err
