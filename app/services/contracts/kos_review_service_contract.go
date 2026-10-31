@@ -7,6 +7,7 @@ import (
 
 type KosReviewService interface {
 	GetByKos(kosID string) ([]models.KosReview, error)
+	GetByID(userID, kosID, reviewID string) (models.KosReview, error)
 	Create(userID string, kosID string, request dto.ReviewRequest) (models.KosReview, error)
 	Update(userID string, kosID string, request dto.ReviewRequest) (models.KosReview, error)
 	Delete(userID string, kosID string) error

@@ -21,6 +21,9 @@ func NewKosReviewService(repo repositoryContracts.KosReviewRepository) *KosRevie
 func (s *KosReviewService) GetByKos(kosID string) ([]models.KosReview, error) {
 	return s.repo.GetByKos(kosID)
 }
+func (s *KosReviewService) GetByID(userID, kosID, reviewID string) (models.KosReview, error) {
+	return s.repo.GetByID(userID, kosID, reviewID)
+}
 func (s *KosReviewService) Create(userID, kosID string, request dto.ReviewRequest) (models.KosReview, error) {
 	if _, err := s.repo.Find(userID, kosID); err == nil {
 		return models.KosReview{}, helpers.ErrDataAlreadyExists

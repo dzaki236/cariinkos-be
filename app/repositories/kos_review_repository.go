@@ -17,6 +17,14 @@ func (r *KosReviewRepository) GetByKos(kosID string) ([]models.KosReview, error)
 	return reviews, err
 }
 
+func (r *KosReviewRepository) GetByID(userID, kosID, reviewID string) (models.KosReview, error) {
+	var review models.KosReview
+	err := facades.Orm().Query().Where("id = ? AND user_id = ? AND kos_id = ?", reviewID, userID, kosID).With("User").FirstOr(&review, func() error {
+		return helpers.ErrDataNotFound
+	})
+	return review, err
+}
+
 func (r *KosReviewRepository) Find(userID, kosID string) (models.KosReview, error) {
 	var review models.KosReview
 	err := facades.Orm().Query().Where("user_id = ? AND kos_id = ?", userID, kosID).With("User").FirstOr(&review, func() error {

@@ -24,6 +24,19 @@ func (c *KosReviewController) Index(ctx http.Context) http.Response {
 	}
 	return ctx.Response().Success().Json(http.Json{"data": data})
 }
+func (c *KosReviewController) Show(ctx http.Context) http.Response {
+	kosID := ctx.Request().Route("id")
+	reviewID := ctx.Request().Route("review_id")
+	userID, err := facades.Auth(ctx).ID()
+	if err != nil {
+		return ctx.Response().Status(http.StatusUnauthorized).Json(http.Json{"message": "Unauthorized"})
+	}
+	data, err := c.service.GetByID(userID, kosID, reviewID)
+	if err != nil {
+		return helpers.ErrorResponse(ctx, err)
+	}
+	return ctx.Response().Success().Json(http.Json{"data": data})
+}
 func (c *KosReviewController) Store(ctx http.Context) http.Response {
 	id := ctx.Request().Route("id")
 	userID, err := facades.Auth(ctx).ID()
