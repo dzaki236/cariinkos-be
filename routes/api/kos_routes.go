@@ -12,9 +12,12 @@ func KosRoutes(router route.Router) {
 	facilityController := providers.NewKosFacilityProvider()
 	photoController := providers.NewKosPhotoProvider()
 	contactController := providers.NewKosContactProvider()
+	reviewController := providers.NewKosReviewProvider()
+	favoriteController := providers.NewFavoriteProvider()
 
-	router.Get("/public/kos", controller.PublicIndex)
+router.Get("/public/kos", controller.PublicIndex)
 	router.Get("/public/kos/{id}", controller.PublicShow)
+	router.Get("/public/kos/{id}/reviews", reviewController.Index)
 	router.Middleware(middleware.NewHandleAuth()).Group(func(router route.Router) {
 		router.Get("/kos", controller.Index)
 		router.Get("/kos/{id}", controller.Show)
@@ -35,5 +38,15 @@ func KosRoutes(router route.Router) {
 		router.Post("/kos/{id}/contacts", contactController.Store)
 		router.Put("/kos/{id}/contacts", contactController.Update)
 		router.Delete("/kos/{id}/contacts", contactController.Destroy)
+		router.Middleware(middleware.NewRoleAuth("user")).Group(func(router route.Router) {
+			router.Post("/kos/{id}/reviews", reviewController.Store)
+			router.Put("/kos/{id}/reviews", reviewController.Update)
+			router.Delete("/kos/{id}/reviews", reviewController.Destroy)
+
+			router.Get("/favorites", favoriteController.Index)
+			router.Post("/kos/{id}/favorite", favoriteController.Store)
+			router.Put("/kos/{id}/favorite", favoriteController.Update)
+			router.Delete("/kos/{id}/favorite", favoriteController.Destroy)
+		})
 	})
 }

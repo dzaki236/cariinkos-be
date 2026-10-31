@@ -15,5 +15,7 @@ func Migrations() []schema.Migration {
 		&migrations.M20261029044809CreateKosFacilitiesTable{},
 		&migrations.M20261029044814CreateKosContactsTable{},
 		&migrations.M20261029044824CreateKosPhotosTable{},
+		&migrations.M20261029044830CreateKosFavoritesTable{},
+		&migrations.M20261029044835CreateKosReviewsTable{},
 	}
 }

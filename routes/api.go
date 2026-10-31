@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"cariinkos/app/http/middleware"
 	apiRoutes "cariinkos/routes/api"
 
 	"github.com/goravel/framework/contracts/http"
@@ -19,8 +18,9 @@ func Api() {
 		})
 		apiRoutes.AuthRoutes(router)
 		apiRoutes.KosRoutes(router)
-		router.Middleware(middleware.NewHandleAuth()).Group(func(router route.Router) {
-			apiRoutes.FacilityRoutes(router)
-		})
+		apiRoutes.UserRoutes(router)
+		apiRoutes.FacilityRoutes(router)
+		// router.Middleware(middleware.NewHandleAuth()).Group(func(router route.Router) {
+		// })
 	})
 }

@@ -24,6 +24,7 @@ func (r *M20261029043717CreateUsersTable) Up() error {
 			table.String("role").Default("owner")
 			table.Primary("id")
 			table.Unique("email")
+			table.TimestampTz("disabled_at").Nullable()
 			table.TimestampsTz()
 		})
 	}
