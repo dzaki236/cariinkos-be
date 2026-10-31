@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"cariinkos/app/dto"
+	"cariinkos/app/facades"
 	"cariinkos/app/helpers"
 	serviceContracts "cariinkos/app/services/contracts"
 	"errors"
@@ -28,6 +29,10 @@ func (c *KosPhotoController) Index(ctx http.Context) http.Response {
 
 func (c *KosPhotoController) Store(ctx http.Context) http.Response {
 	id := ctx.Request().Route("id")
+	userID, err := facades.Auth(ctx).ID()
+	if err != nil || userID == "" {
+		return ctx.Response().Status(http.StatusUnauthorized).Json(http.Json{"message": "Unauthorized"})
+	}
 	file, err := ctx.Request().File("photo")
 	if err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": "Photo file is required"})
@@ -35,7 +40,7 @@ func (c *KosPhotoController) Store(ctx http.Context) http.Response {
 	if err := validatePhotoFile(file); err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": err.Error()})
 	}
-	photo, err := c.service.Create(ctx.Context(), id, dto.CreateKosPhotoRequest{File: file})
+	photo, err := c.service.Create(ctx.Context(), userID, id, dto.CreateKosPhotoRequest{File: file})
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -44,6 +49,10 @@ func (c *KosPhotoController) Store(ctx http.Context) http.Response {
 
 func (c *KosPhotoController) Update(ctx http.Context) http.Response {
 	id := ctx.Request().Route("id")
+	userID, err := facades.Auth(ctx).ID()
+	if err != nil || userID == "" {
+		return ctx.Response().Status(http.StatusUnauthorized).Json(http.Json{"message": "Unauthorized"})
+	}
 	file, err := ctx.Request().File("photo")
 	if err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": "Photo file is required"})
@@ -51,7 +60,7 @@ func (c *KosPhotoController) Update(ctx http.Context) http.Response {
 	if err := validatePhotoFile(file); err != nil {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": err.Error()})
 	}
-	photo, err := c.service.Update(ctx.Context(), id, ctx.Request().Route("photo_id"), dto.UpdateKosPhotoRequest{File: file})
+	photo, err := c.service.Update(ctx.Context(), userID, id, ctx.Request().Route("photo_id"), dto.UpdateKosPhotoRequest{File: file})
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -60,7 +69,11 @@ func (c *KosPhotoController) Update(ctx http.Context) http.Response {
 
 func (c *KosPhotoController) Destroy(ctx http.Context) http.Response {
 	id := ctx.Request().Route("id")
-	if err := c.service.Delete(ctx.Context(), id, ctx.Request().Route("photo_id")); err != nil {
+	userID, err := facades.Auth(ctx).ID()
+	if err != nil || userID == "" {
+		return ctx.Response().Status(http.StatusUnauthorized).Json(http.Json{"message": "Unauthorized"})
+	}
+	if err := c.service.Delete(ctx.Context(), userID, id, ctx.Request().Route("photo_id")); err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
 	return ctx.Response().Success().Json(http.Json{"message": "Kos photo deleted successfully"})

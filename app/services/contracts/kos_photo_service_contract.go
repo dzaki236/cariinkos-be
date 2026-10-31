@@ -9,7 +9,7 @@ import (
 
 type KosPhotoService interface {
 	GetAllByKosID(kosID string) ([]models.KosPhoto, error)
-	Create(ctx context.Context, kosID string, request dto.CreateKosPhotoRequest) (models.KosPhoto, error)
-	Update(ctx context.Context, kosID, photoID string, request dto.UpdateKosPhotoRequest) (models.KosPhoto, error)
-	Delete(ctx context.Context, kosID, photoID string) error
+	Create(ctx context.Context, userID, kosID string, request dto.CreateKosPhotoRequest) (models.KosPhoto, error)
+	Update(ctx context.Context, userID, kosID, photoID string, request dto.UpdateKosPhotoRequest) (models.KosPhoto, error)
+	Delete(ctx context.Context, userID, kosID, photoID string) error
 }

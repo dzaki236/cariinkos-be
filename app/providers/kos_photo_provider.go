@@ -10,6 +10,7 @@ import (
 func NewKosPhotoProvider() *controllers.KosPhotoController {
 	uploader := helpers.NewCloudinaryPhotoUploader()
 	repository := repositories.NewKosPhotoRepository()
-	service := services.NewKosPhotoService(repository, uploader)
+	kosRepository := repositories.NewKosRepository()
+	service := services.NewKosPhotoService(repository, kosRepository, uploader)
 	return controllers.NewKosPhotoController(service)
 }

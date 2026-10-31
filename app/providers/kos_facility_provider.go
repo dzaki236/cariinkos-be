@@ -8,6 +8,7 @@ import (
 
 func NewKosFacilityProvider() *controllers.KosFacilityController {
 	repository := repositories.NewKosFacilityRepository()
-	service := services.NewKosFacilityService(repository)
+	kosRepository := repositories.NewKosRepository()
+	service := services.NewKosFacilityService(repository, kosRepository)
 	return controllers.NewKosFacilityController(service)
 }

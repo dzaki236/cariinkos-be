@@ -8,6 +8,7 @@ import (
 
 func NewKosContactProvider() *controllers.KosContactController {
 	repository := repositories.NewKosContactRepository()
-	service := services.NewKosContactService(repository)
+	kosRepository := repositories.NewKosRepository()
+	service := services.NewKosContactService(repository, kosRepository)
 	return controllers.NewKosContactController(service)
 }

@@ -2,6 +2,7 @@ package services
 
 import (
 	"cariinkos/app/dto"
+	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 	serviceContracts "cariinkos/app/services/contracts"
@@ -69,10 +70,13 @@ func (s *KosService) Create(userID string, request dto.CreateKosRequest) (models
 	return kos, nil
 }
 
-func (s *KosService) Update(id string, request dto.UpdateKosRequest) (models.Kos, error) {
+func (s *KosService) Update(userID, id string, request dto.UpdateKosRequest) (models.Kos, error) {
 	kos, err := s.repo.GetByID(id)
 	if err != nil {
 		return models.Kos{}, err
+	}
+	if kos.UserID != userID {
+		return models.Kos{}, helpers.ErrDataNotFound
 	}
 	kos.Name = request.Name
 	kos.Description = request.Description
@@ -96,7 +100,14 @@ func (s *KosService) Update(id string, request dto.UpdateKosRequest) (models.Kos
 	return kos, nil
 }
 
-func (s *KosService) Delete(id string) error {
+func (s *KosService) Delete(userID, id string) error {
+	kos, err := s.repo.GetByID(id)
+	if err != nil {
+		return err
+	}
+	if kos.UserID != userID {
+		return helpers.ErrDataNotFound
+	}
 	return s.repo.Delete(id)
 }
 

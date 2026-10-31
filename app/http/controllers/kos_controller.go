@@ -116,6 +116,10 @@ func (c *KosController) Store(ctx http.Context) http.Response {
 
 func (c *KosController) Update(ctx http.Context) http.Response {
 	id := ctx.Request().Route("id")
+	userID, err := facades.Auth(ctx).ID()
+	if err != nil || userID == "" {
+		return ctx.Response().Status(http.StatusUnauthorized).Json(http.Json{"message": "Unauthorized"})
+	}
 	var request dto.UpdateKosRequest
 	if err := ctx.Request().Bind(&request); err != nil {
 		return ctx.Response().Status(http.StatusNotFound).Json(http.Json{"message": "Invalid request body"})
@@ -137,7 +141,7 @@ func (c *KosController) Update(ctx http.Context) http.Response {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": "Validation failed", "errors": validator.Errors().All()})
 	}
 
-	kos, err := c.service.Update(id, request)
+	kos, err := c.service.Update(userID, id, request)
 	if err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
@@ -146,7 +150,11 @@ func (c *KosController) Update(ctx http.Context) http.Response {
 
 func (c *KosController) Destroy(ctx http.Context) http.Response {
 	id := ctx.Request().Route("id")
-	if err := c.service.Delete(id); err != nil {
+	userID, err := facades.Auth(ctx).ID()
+	if err != nil || userID == "" {
+		return ctx.Response().Status(http.StatusUnauthorized).Json(http.Json{"message": "Unauthorized"})
+	}
+	if err := c.service.Delete(userID, id); err != nil {
 		return helpers.ErrorResponse(ctx, err)
 	}
 	return ctx.Response().Success().Json(http.Json{"message": "Kos deleted successfully"})
