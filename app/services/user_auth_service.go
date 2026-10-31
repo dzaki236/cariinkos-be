@@ -27,13 +27,13 @@ func (s *UserAuthService) Login(ctx http.Context, request dto.LoginRequest) (mod
 	user, err := s.repository.FindByEmail(request.Email)
 	if err != nil {
 		if errors.Is(err, helpers.ErrDataNotFound) {
-			return models.User{}, "", serviceContracts.ErrInvalidCredentials
+			return models.User{}, "", helpers.ErrInvalidCredentials
 		}
 		return models.User{}, "", err
 	}
 
 	if !facades.Hash().Check(request.Password, user.Password) {
-		return models.User{}, "", serviceContracts.ErrInvalidCredentials
+		return models.User{}, "", helpers.ErrInvalidCredentials
 	}
 
 	token, err := facades.Auth(ctx).Login(user)
@@ -47,7 +47,7 @@ func (s *UserAuthService) Login(ctx http.Context, request dto.LoginRequest) (mod
 func (s *UserAuthService) Register(request dto.RegisterRequest) (models.User, error) {
 	_, err := s.repository.FindByEmail(request.Email)
 	if err == nil {
-		return models.User{}, serviceContracts.ErrEmailAlreadyRegistered
+		return models.User{}, helpers.ErrEmailAlreadyRegistered
 	}
 	if !errors.Is(err, helpers.ErrDataNotFound) {
 		return models.User{}, err
@@ -68,7 +68,7 @@ func (s *UserAuthService) Register(request dto.RegisterRequest) (models.User, er
 	if err := s.repository.Create(&user); err != nil {
 		databaseError := strings.ToLower(err.Error())
 		if strings.Contains(databaseError, "users_email_unique") || strings.Contains(databaseError, "users_email_key") {
-			return models.User{}, serviceContracts.ErrEmailAlreadyRegistered
+			return models.User{}, helpers.ErrEmailAlreadyRegistered
 		}
 		return models.User{}, err
 	}
@@ -92,6 +92,20 @@ func (s *UserAuthService) UpdateProfile(ctx http.Context, request dto.UpdateProf
 
 	user.Name = request.Name
 	user.Email = request.Email
+	if request.NewPassword != nil && *request.NewPassword != "" {
+		if request.OldPassword == nil || !facades.Hash().Check(*request.OldPassword, user.Password) {
+			return models.User{}, helpers.ErrInvalidProfilePassword
+		}
+		if request.NewPasswordConfirmation == nil || *request.NewPassword != *request.NewPasswordConfirmation {
+			return models.User{}, helpers.ErrPasswordConfirmationMismatch
+		}
+
+		password, err := facades.Hash().Make(*request.NewPassword)
+		if err != nil {
+			return models.User{}, err
+		}
+		user.Password = password
+	}
 	if err := s.repository.UpdateProfile(&user); err != nil {
 		return models.User{}, err
 	}

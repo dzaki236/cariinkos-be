@@ -32,7 +32,7 @@ func (c *UserManagementController) UpdateStatus(ctx http.Context) http.Response 
 		return ctx.Response().Status(http.StatusBadRequest).Json(http.Json{"message": "Invalid request body"})
 	}
 	user, err := c.service.UpdateUserStatus(ctx.Request().Route("id"), request.Active)
-	if errors.Is(err, serviceContracts.ErrNotManageableUser) {
+	if errors.Is(err, helpers.ErrNotManageableUser) {
 		return ctx.Response().Status(http.StatusUnprocessableEntity).Json(http.Json{"message": err.Error()})
 	}
 	if err != nil {

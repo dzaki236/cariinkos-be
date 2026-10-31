@@ -37,7 +37,7 @@ func (c *AuthController) Login(ctx http.Context) http.Response {
 
 	user, token, err := c.service.Login(ctx, request)
 	if err != nil {
-		if errors.Is(err, serviceContracts.ErrInvalidCredentials) {
+		if errors.Is(err, helpers.ErrInvalidCredentials) {
 			return ctx.Response().Status(http.StatusUnauthorized).Json(http.Json{"message": "Invalid email or password"})
 		}
 		return helpers.ErrorResponse(ctx, err)
@@ -65,7 +65,7 @@ func (c *AuthController) Register(ctx http.Context) http.Response {
 	}
 
 	user, err := c.service.Register(request)
-	if errors.Is(err, serviceContracts.ErrEmailAlreadyRegistered) {
+	if errors.Is(err, helpers.ErrEmailAlreadyRegistered) {
 		return ctx.Response().Status(http.StatusConflict).Json(http.Json{"message": err.Error()})
 	}
 	if err != nil {
@@ -88,8 +88,11 @@ func (c *AuthController) Profile(ctx http.Context) http.Response {
 	}
 
 	validator, err := ctx.Request().Validate(map[string]any{
-		"name":  "required|string|max:255",
-		"email": "required|email|max:255",
+		"name":                      "required|string|max:255",
+		"email":                     "required|email|max:255",
+		"old_password":              "required_with:new_password|string",
+		"new_password":              "nullable|string|min:8",
+		"new_password_confirmation": "required_with:new_password|same:new_password",
 	})
 	if err != nil {
 		return ctx.Response().Status(http.StatusInternalServerError).Json(http.Json{"message": err.Error()})

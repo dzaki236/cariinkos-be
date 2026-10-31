@@ -1,12 +1,6 @@
 package contracts
 
-import (
-	"errors"
-
-	"cariinkos/app/models"
-)
-
-var ErrNotManageableUser = errors.New("only users with role user can be managed")
+import "cariinkos/app/models"
 
 type UserManagementService interface {
 	GetUsers() ([]models.User, error)

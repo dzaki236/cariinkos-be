@@ -3,6 +3,7 @@ package services
 import (
 	"time"
 
+	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 	serviceContracts "cariinkos/app/services/contracts"
@@ -26,7 +27,7 @@ func (s *UserManagementService) UpdateUserStatus(id string, active bool) (models
 		return models.User{}, err
 	}
 	if user.Role != "user" {
-		return models.User{}, serviceContracts.ErrNotManageableUser
+		return models.User{}, helpers.ErrNotManageableUser
 	}
 
 	if active {

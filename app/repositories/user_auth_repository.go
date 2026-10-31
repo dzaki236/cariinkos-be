@@ -41,8 +41,9 @@ func (r *UserAuthRepository) FindByID(id string) (models.User, error) {
 
 func (r *UserAuthRepository) UpdateProfile(user *models.User) error {
 	_, err := facades.Orm().Query().Where("id = ?", user.ID).Update(map[string]any{
-		"name":  user.Name,
-		"email": user.Email,
+		"name":     user.Name,
+		"email":    user.Email,
+		"password": user.Password,
 	})
 	return err
 }
