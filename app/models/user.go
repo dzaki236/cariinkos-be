@@ -15,7 +15,7 @@ type User struct {
 	Role       string     `gorm:"column:role" json:"role"`
 	CreatedAt  time.Time  `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt  time.Time  `gorm:"column:updated_at" json:"updated_at"`
-	DisabledAt *time.Time `gorm:"column:disable_at" json:"disabled_at,omitempty"`
+	DisabledAt *time.Time `gorm:"column:disabled_at" json:"disabled_at,omitempty"`
 	Kos        []Kos      `gorm:"foreignKey:UserID;references:ID" json:"kos,omitempty"`
 }
 
