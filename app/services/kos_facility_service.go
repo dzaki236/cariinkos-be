@@ -1,7 +1,6 @@
 package services
 
 import (
-	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 	serviceContracts "cariinkos/app/services/contracts"
@@ -21,28 +20,17 @@ func (s *KosFacilityService) GetAllByKosID(kosID string) ([]models.Facility, err
 }
 
 func (s *KosFacilityService) Attach(userID, kosID, facilityID string) error {
-	if err := s.ensureOwner(userID, kosID); err != nil {
+	if err := CheckKosOwner(userID, kosID, s.kosRepo); err != nil {
 		return err
 	}
 	return s.repo.Attach(kosID, facilityID)
 }
 
 func (s *KosFacilityService) Detach(userID, kosID, facilityID string) error {
-	if err := s.ensureOwner(userID, kosID); err != nil {
+	if err := CheckKosOwner(userID, kosID, s.kosRepo); err != nil {
 		return err
 	}
 	return s.repo.Detach(kosID, facilityID)
-}
-
-func (s *KosFacilityService) ensureOwner(userID, kosID string) error {
-	kos, err := s.kosRepo.GetByID(kosID)
-	if err != nil {
-		return err
-	}
-	if kos.UserID != userID {
-		return helpers.ErrDataNotFound
-	}
-	return nil
 }
 
 var _ serviceContracts.KosFacilityService = (*KosFacilityService)(nil)

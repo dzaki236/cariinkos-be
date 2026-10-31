@@ -37,6 +37,9 @@ func (r *KosRepository) getData(page, perPage int, publishedOnly bool) ([]models
 	if err != nil {
 		return nil, 0, err
 	}
+	if err := r.getAvgRatingsAndFavoriteCountForKos(dataKos); err != nil {
+		return nil, 0, err
+	}
 	for index := range dataKos {
 		var photo models.KosPhoto
 		err := facades.Orm().Query().Where("kos_id = ?", dataKos[index].ID).Order("created_at asc").Order("id asc").First(&photo)
@@ -75,7 +78,71 @@ func (r *KosRepository) getByID(id string, publishedOnly bool) (models.Kos, erro
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return models.Kos{}, helpers.ErrDataNotFound
 	}
+	if err != nil {
+		return models.Kos{}, err
+	}
+	if err := r.getAvgRatingsAndFavoriteCount(&kos); err != nil {
+		return models.Kos{}, err
+	}
 	return kos, err
+}
+
+func (r *KosRepository) getAvgRatingsAndFavoriteCount(kos *models.Kos) error {
+	var tablename string = kos.TableName()
+	var aggregate struct {
+		AverageRating *float64 `gorm:"column:average_rating"`
+		FavoriteCount int64    `gorm:"column:favorite_count"`
+	}
+	err := facades.Orm().Query().
+		Table(tablename).Select("kos.id, "+ratingAndFavoriteAggregates).
+		Where("kos.id = ?", kos.ID).
+		First(&aggregate)
+	if err != nil {
+		return err
+	}
+	kos.Rattings = aggregate.AverageRating
+	kos.FavoriteCount = aggregate.FavoriteCount
+	return nil
+}
+
+const ratingAndFavoriteAggregates = "(SELECT AVG(rating) FROM kos_reviews WHERE kos_reviews.kos_id = kos.id) AS average_rating, (SELECT COUNT(*) FROM kos_favorites WHERE kos_favorites.kos_id = kos.id) AS favorite_count"
+
+func (r *KosRepository) getAvgRatingsAndFavoriteCountForKos(kosList []models.Kos) error {
+	var tablename string = models.Kos{}.TableName()
+	if len(kosList) == 0 {
+		return nil
+	}
+	type aggregate struct {
+		KosID         string   `gorm:"column:kos_id"`
+		AverageRating *float64 `gorm:"column:average_rating"`
+		FavoriteCount int64    `gorm:"column:favorite_count"`
+	}
+	var aggregates []aggregate
+	if err := facades.Orm().Query().Table(tablename).
+		Select("kos.id AS kos_id, "+ratingAndFavoriteAggregates).
+		Where("kos.id IN ?", kosIDs(kosList)).
+		Find(&aggregates); err != nil {
+		return err
+	}
+	statisticsByKosID := make(map[string]aggregate, len(aggregates))
+	for _, item := range aggregates {
+		statisticsByKosID[item.KosID] = item
+	}
+	for index := range kosList {
+		if item, exists := statisticsByKosID[kosList[index].ID]; exists {
+			kosList[index].Rattings = item.AverageRating
+			kosList[index].FavoriteCount = item.FavoriteCount
+		}
+	}
+	return nil
+}
+
+func kosIDs(kosList []models.Kos) []string {
+	ids := make([]string, len(kosList))
+	for index := range kosList {
+		ids[index] = kosList[index].ID
+	}
+	return ids
 }
 
 func (r *KosRepository) Create(kos *models.Kos) error {

@@ -28,6 +28,8 @@ type Kos struct {
 	Status            string    `gorm:"column:status" json:"status"`
 	CreatedAt         time.Time `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt         time.Time `gorm:"column:updated_at" json:"updated_at"`
+	Rattings          *float64  `gorm:"-" json:"rattings"`
+	FavoriteCount     int64     `gorm:"-" json:"favorite_count"`
 
 	User       User        `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
 	Facilities []Facility  `gorm:"many2many:kos_facilities;foreignKey:ID;joinForeignKey:KosID;references:ID;joinReferences:FacilityID" json:"facilities,omitempty"`

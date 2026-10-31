@@ -35,7 +35,7 @@ func (r *KosPhotoRepository) Create(photo *models.KosPhoto) error {
 }
 
 func (r *KosPhotoRepository) Update(photo *models.KosPhoto) error {
-	var tablename = photo.TableName() // get table name
+	var tablename string = photo.TableName() // get table name
 	result, err := facades.Orm().Query().Table(tablename).Where("kos_id = ? AND id = ?", photo.KosID, photo.ID).Update(map[string]any{
 		"image_url": photo.ImageURL,
 		"public_id": photo.PublicID,

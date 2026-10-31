@@ -30,7 +30,7 @@ func (s *KosPhotoService) GetAllByKosID(kosID string) ([]models.KosPhoto, error)
 }
 
 func (s *KosPhotoService) Create(ctx context.Context, userID, kosID string, request dto.CreateKosPhotoRequest) (models.KosPhoto, error) {
-	if err := s.ensureOwner(userID, kosID); err != nil {
+	if err := CheckKosOwner(userID, kosID, s.kosRepo); err != nil {
 		return models.KosPhoto{}, err
 	}
 	if request.File == nil {
@@ -57,7 +57,7 @@ func (s *KosPhotoService) Create(ctx context.Context, userID, kosID string, requ
 }
 
 func (s *KosPhotoService) Update(ctx context.Context, userID, kosID, photoID string, request dto.UpdateKosPhotoRequest) (models.KosPhoto, error) {
-	if err := s.ensureOwner(userID, kosID); err != nil {
+	if err := CheckKosOwner(userID, kosID, s.kosRepo); err != nil {
 		return models.KosPhoto{}, err
 	}
 	photo, err := s.repo.GetByID(kosID, photoID)
@@ -93,7 +93,7 @@ func (s *KosPhotoService) Update(ctx context.Context, userID, kosID, photoID str
 }
 
 func (s *KosPhotoService) Delete(ctx context.Context, userID, kosID, photoID string) error {
-	if err := s.ensureOwner(userID, kosID); err != nil {
+	if err := CheckKosOwner(userID, kosID, s.kosRepo); err != nil {
 		return err
 	}
 	photo, err := s.repo.GetByID(kosID, photoID)
@@ -105,17 +105,6 @@ func (s *KosPhotoService) Delete(ctx context.Context, userID, kosID, photoID str
 	}
 	if photo.PublicID != nil {
 		return s.uploader.Delete(ctx, *photo.PublicID)
-	}
-	return nil
-}
-
-func (s *KosPhotoService) ensureOwner(userID, kosID string) error {
-	kos, err := s.kosRepo.GetByID(kosID)
-	if err != nil {
-		return err
-	}
-	if kos.UserID != userID {
-		return helpers.ErrDataNotFound
 	}
 	return nil
 }
