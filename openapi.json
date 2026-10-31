@@ -1128,6 +1128,49 @@
                 }
             }
         },
+        "/kos/{id}/review/{review_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "name": "review_id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Review"
+                ],
+                "summary": "Detail review milik user",
+                "description": "Role user. Review harus cocok dengan kos dan user yang sedang login.",
+                "operationId": "getUserReview",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Review"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                }
+            }
+        },
         "/kos/{id}/reviews": {
             "parameters": [
                 {
@@ -1217,6 +1260,9 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationFailed"
                     }
                 }
             },

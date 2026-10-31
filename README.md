@@ -90,6 +90,7 @@ Semua path di bawah relatif terhadap base URL.
 | POST | `/kos/{id}/contacts` | Ya | `owner` | Buat kontak kos |
 | PUT | `/kos/{id}/contacts` | Ya | `owner` | Perbarui kontak kos |
 | DELETE | `/kos/{id}/contacts` | Ya | `owner` | Hapus kontak kos |
+| GET | `/kos/{id}/review/{review_id}` | Ya | `user` | Detail review milik user yang login |
 | POST | `/kos/{id}/reviews` | Ya | `user` | Buat review |
 | PUT | `/kos/{id}/reviews` | Ya | `user` | Perbarui review milik user |
 | DELETE | `/kos/{id}/reviews` | Ya | `user` | Hapus review milik user |
@@ -146,7 +147,7 @@ Request JSON:
 
 ## Kos
 
-`GET /public/kos` dan `GET /public/kos/{id}` tidak memerlukan autentikasi. Daftar publik hanya mengambil kos dengan status `published`. `GET /public/kos/{id}/reviews` juga publik dan mengembalikan daftar review beserta relasi user yang dimuat.
+`GET /public/kos` dan `GET /public/kos/{id}` tidak memerlukan autentikasi. Daftar publik hanya mengambil kos dengan status `published`. `GET /public/kos/{id}/reviews` juga publik dan mengembalikan `{ "data": [...] }` berisi review beserta relasi user yang dimuat. `GET /kos/{id}/review/{review_id}` memerlukan role `user`; review harus cocok dengan `kos_id`, `review_id`, dan user yang sedang login, lalu mengembalikan `{ "data": review }`.
 
 `GET /public/kos` menerima `page` default `1` dan `per_page` default `10`, maksimal `100`. Nilai query kurang dari `1` atau tidak valid kembali ke nilai default. Metadata berisi `page`, `per_page`, `total`, dan `last_page`.
 
@@ -209,7 +210,7 @@ Kirim request sebagai `multipart/form-data` dengan field file `photo`. File haru
 {"rating":5,"comment":"Lokasi bersih dan dekat kampus"}
 ```
 
-Keduanya hanya untuk role `user`. Saat create, `rating` wajib bernilai 1 sampai 5 dan `comment` wajib string maksimal 2000 karakter. Satu user hanya dapat memiliki satu review untuk satu kos. `POST` mengembalikan `201`, `PUT` mengembalikan `200`, dan `DELETE` mengembalikan message.
+Keduanya hanya untuk role `user`. `POST` memvalidasi `rating` wajib numeric bernilai 1 sampai 5 dan `comment` wajib string maksimal 2000 karakter. `PUT` melakukan bind JSON ke field yang sama, tetapi controller tidak menjalankan validasi field eksplisit seperti pada `POST`; service dapat menolak data dan menghasilkan error. Satu user hanya dapat memiliki satu review untuk satu kos. `POST` mengembalikan `201`, `PUT` mengembalikan `200`, dan `DELETE` mengembalikan message. Detail review milik user dapat dibaca melalui `GET /kos/{id}/review/{review_id}`.
 
 ## Favorite
 
