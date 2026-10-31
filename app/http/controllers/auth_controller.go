@@ -65,7 +65,7 @@ func (c *AuthController) Register(ctx http.Context) http.Response {
 	}
 
 	user, err := c.service.Register(request)
-	if errors.Is(err, helpers.ErrEmailAlreadyRegistered) {
+	if errors.Is(err, helpers.ErrDataAlreadyExists) {
 		return ctx.Response().Status(http.StatusConflict).Json(http.Json{"message": err.Error()})
 	}
 	if err != nil {

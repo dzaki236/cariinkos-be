@@ -2,9 +2,12 @@ package services
 
 import (
 	"cariinkos/app/dto"
+	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 	serviceContracts "cariinkos/app/services/contracts"
+
+	"errors"
 
 	"github.com/google/uuid"
 )
@@ -20,6 +23,11 @@ func (s *KosFavoriteService) GetByUser(userID string) ([]models.KosFavorite, err
 	return s.repo.GetByUser(userID)
 }
 func (s *KosFavoriteService) Create(userID, kosID string, request dto.UpdateFavoriteRequest) (models.KosFavorite, error) {
+	if _, err := s.repo.Find(userID, kosID); err == nil {
+		return models.KosFavorite{}, helpers.ErrDataAlreadyExists
+	} else if !errors.Is(err, helpers.ErrDataNotFound) {
+		return models.KosFavorite{}, err
+	}
 	favorite := models.KosFavorite{ID: uuid.NewString(), UserID: userID, KosID: kosID, Note: request.Note}
 	if err := s.repo.Create(&favorite); err != nil {
 		return models.KosFavorite{}, err

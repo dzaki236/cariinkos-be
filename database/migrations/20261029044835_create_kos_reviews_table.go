@@ -21,7 +21,6 @@ func (r *M20261029044835CreateKosReviewsTable) Up() error {
 			table.UnsignedTinyInteger("rating")
 			table.Text("comment").Nullable()
 			table.Primary("id")
-			table.Unique("user_id", "kos_id")
 			table.Foreign("user_id").References("id").On("users")
 			table.Foreign("kos_id").References("id").On("kos")
 			table.TimestampsTz()

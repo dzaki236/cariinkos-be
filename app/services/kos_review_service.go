@@ -1,7 +1,10 @@
 package services
 
 import (
+	"errors"
+
 	"cariinkos/app/dto"
+	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
 	serviceContracts "cariinkos/app/services/contracts"
@@ -20,6 +23,11 @@ func (s *KosReviewService) GetByKos(kosID string) ([]models.KosReview, error) {
 	return s.repo.GetByKos(kosID)
 }
 func (s *KosReviewService) Create(userID, kosID string, request dto.ReviewRequest) (models.KosReview, error) {
+	if _, err := s.repo.Find(userID, kosID); err == nil {
+		return models.KosReview{}, helpers.ErrDataAlreadyExists
+	} else if !errors.Is(err, helpers.ErrDataNotFound) {
+		return models.KosReview{}, err
+	}
 	review := models.KosReview{ID: uuid.NewString(), UserID: userID, KosID: kosID, Rating: request.Rating, Comment: request.Comment}
 	if err := s.repo.Create(&review); err != nil {
 		return models.KosReview{}, err

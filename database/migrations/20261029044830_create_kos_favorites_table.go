@@ -20,7 +20,6 @@ func (r *M20261029044830CreateKosFavoritesTable) Up() error {
 			table.Uuid("kos_id")
 			table.String("note").Nullable()
 			table.Primary("id")
-			table.Unique("user_id", "kos_id")
 			table.Foreign("user_id").References("id").On("users")
 			table.Foreign("kos_id").References("id").On("kos")
 			table.TimestampsTz()
