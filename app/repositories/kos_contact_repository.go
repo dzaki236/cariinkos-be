@@ -1,14 +1,10 @@
 package repositories
 
 import (
-	"errors"
-
 	"cariinkos/app/facades"
 	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
-
-	"gorm.io/gorm"
 )
 
 type KosContactRepository struct{}
@@ -17,10 +13,9 @@ func NewKosContactRepository() *KosContactRepository { return &KosContactReposit
 
 func (r *KosContactRepository) GetByKosID(kosID string) (models.KosContact, error) {
 	var contact models.KosContact
-	err := facades.Orm().Query().Where("kos_id = ?", kosID).First(&contact)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return models.KosContact{}, helpers.ErrDataNotFound
-	}
+	err := facades.Orm().Query().Where("kos_id = ?", kosID).FirstOr(&contact, func() error {
+		return helpers.ErrDataNotFound
+	})
 	return contact, err
 }
 

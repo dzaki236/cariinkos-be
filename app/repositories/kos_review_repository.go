@@ -5,9 +5,6 @@ import (
 	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
-	"errors"
-
-	"gorm.io/gorm"
 )
 
 type KosReviewRepository struct{}
@@ -22,15 +19,14 @@ func (r *KosReviewRepository) GetByKos(kosID string) ([]models.KosReview, error)
 
 func (r *KosReviewRepository) Find(userID, kosID string) (models.KosReview, error) {
 	var review models.KosReview
-	err := facades.Orm().Query().Where("user_id = ? AND kos_id = ?", userID, kosID).With("User").First(&review)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return models.KosReview{}, helpers.ErrDataNotFound
-	}
+	err := facades.Orm().Query().Where("user_id = ? AND kos_id = ?", userID, kosID).With("User").FirstOr(&review, func() error {
+		return helpers.ErrDataNotFound
+	})
 	return review, err
 }
 
 func (r *KosReviewRepository) Create(review *models.KosReview) error {
-	return facades.Orm().Query().Create(review)
+	return facades.Orm().Query().Create(&review)
 }
 
 func (r *KosReviewRepository) Update(review *models.KosReview) error {

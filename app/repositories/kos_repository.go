@@ -8,8 +8,6 @@ import (
 	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
-
-	"gorm.io/gorm"
 )
 
 type KosRepository struct{}
@@ -42,8 +40,10 @@ func (r *KosRepository) getData(page, perPage int, publishedOnly bool) ([]models
 	}
 	for index := range dataKos {
 		var photo models.KosPhoto
-		err := facades.Orm().Query().Where("kos_id = ?", dataKos[index].ID).Order("created_at asc").Order("id asc").First(&photo)
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		err := facades.Orm().Query().Where("kos_id = ?", dataKos[index].ID).Order("created_at asc").Order("id asc").FirstOr(&photo, func() error {
+			return helpers.ErrDataNotFound
+		})
+		if errors.Is(err, helpers.ErrDataNotFound) {
 			baseURL := strings.TrimRight(facades.Config().GetString("http.url"), "/") + "/public/images_not_found.jpg"
 			dataKos[index].CoverPhoto = &baseURL
 			continue
@@ -74,10 +74,9 @@ func (r *KosRepository) getByID(id string, publishedOnly bool) (models.Kos, erro
 		With("Facilities").
 		With("Contact").
 		With("Photos").
-		First(&kos)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return models.Kos{}, helpers.ErrDataNotFound
-	}
+		FirstOr(&kos, func() error {
+			return helpers.ErrDataNotFound
+		})
 	if err != nil {
 		return models.Kos{}, err
 	}

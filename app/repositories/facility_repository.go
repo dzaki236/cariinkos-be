@@ -1,14 +1,10 @@
 package repositories
 
 import (
-	"errors"
-
 	"cariinkos/app/facades"
 	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
-
-	"gorm.io/gorm"
 )
 
 type FacilityRepository struct{}
@@ -25,10 +21,9 @@ func (r *FacilityRepository) GetAllData() ([]models.Facility, error) {
 
 func (r *FacilityRepository) GetByID(id string) (models.Facility, error) {
 	var facility models.Facility
-	err := facades.Orm().Query().Where("id = ?", id).First(&facility)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return models.Facility{}, helpers.ErrDataNotFound
-	}
+	err := facades.Orm().Query().Where("id = ?", id).FirstOr(&facility, func() error {
+		return helpers.ErrDataNotFound
+	})
 	return facility, err
 }
 

@@ -7,8 +7,6 @@ import (
 	"cariinkos/app/helpers"
 	"cariinkos/app/models"
 	repositoryContracts "cariinkos/app/repositories/contracts"
-
-	"gorm.io/gorm"
 )
 
 type UserAuthRepository struct{}
@@ -23,19 +21,17 @@ func (r *UserAuthRepository) FindByEmail(email string) (models.User, error) {
 		return user, errors.New("email is required")
 	}
 
-	err := facades.Orm().Query().Where("email = ?", email).First(&user)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return models.User{}, helpers.ErrDataNotFound
-	}
+	err := facades.Orm().Query().Where("email = ?", email).FirstOr(&user, func() error {
+		return helpers.ErrDataNotFound
+	})
 	return user, err
 }
 
 func (r *UserAuthRepository) FindByID(id string) (models.User, error) {
 	var user models.User
-	err := facades.Orm().Query().Where("id = ?", id).First(&user)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return models.User{}, helpers.ErrDataNotFound
-	}
+	err := facades.Orm().Query().Where("id = ?", id).FirstOr(&user, func() error {
+		return helpers.ErrDataNotFound
+	})
 	return user, err
 }
 

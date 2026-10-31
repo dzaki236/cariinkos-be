@@ -15,9 +15,8 @@ func NewKosFacilityRepository() *KosFacilityRepository {
 
 func (r *KosFacilityRepository) GetAllByKosID(kosID string) ([]models.Facility, error) {
 	var facilities []models.Facility
-	var tablename string = models.Facility{}.TableName() // get table name
-	err := facades.Orm().Query().Table(tablename).
-		Join("JOIN facilities ON facilities.id = kos_facilities.facility_id").
+	err := facades.Orm().Query().Table(models.Facility{}.TableName()).
+		Join("JOIN kos_facilities ON kos_facilities.facility_id = facilities.id").
 		Where("kos_facilities.kos_id = ?", kosID).
 		Select("facilities.*").Find(&facilities)
 	return facilities, err
@@ -25,7 +24,9 @@ func (r *KosFacilityRepository) GetAllByKosID(kosID string) ([]models.Facility, 
 
 func (r *KosFacilityRepository) Attach(kosID, facilityID string) error {
 	var facility models.Facility
-	if err := facades.Orm().Query().Where("id = ?", facilityID).First(&facility); err != nil {
+	if err := facades.Orm().Query().Where("id = ?", facilityID).FirstOr(&facility, func() error {
+		return helpers.ErrDataNotFound
+	}); err != nil {
 		return err
 	}
 	return facades.Orm().Query().Create(&models.KosFacility{KosID: kosID, FacilityID: facilityID})
